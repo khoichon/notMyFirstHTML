@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Part 3</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body id="body">
+    <h1>Safe Zone</h1>
+    <p>You're safe.</p>
+    <p>However, we don't have much time.</p>
+    <p>We need to get you out of here.</p>
+    <p>Meanwhile, here are some rewards, you might need them!</p>
+    <button onclick="claimReward()">Get Reward</button>
+    <script>
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      async function claimReward() {
+        alert("You have claimed a reward!");
+        await sleep(2000);
+        alert("Oh no.");
+        await sleep(1000);
+        document.getElementById("body").innerHTML = "<img src=rickroll.jpg id=rickroll>";
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const img = document.getElementById("rickroll");
+        img.width = width;
+        img.height = height;
+        alert("Oh no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no");
+      }
+    </script>
+  </body>

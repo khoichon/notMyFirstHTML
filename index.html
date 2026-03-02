@@ -1,69 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta lang=en name="Task Manager" content="A tool to manage your tasks" charset="utf-8">
-    <title>Task Manager</title>
-    <style>
-      .black {
-        color: #676767;
-      }
-      .centered{
-        text-align: center;
-      }
-      body{
-        background-color: #000000;
-        color: #ffffff;
-      }
-      h1{
-        color: #00ff00;
-      }
-      .red{
-        color: #ff0000
-      }
-    </style>
-  </head>
-  <body>
-    <div class="centered">
-      <h1>Your tasks</h1>
-      <h2>ICT Tools</h2>
-      <h3>Design Thinking</h3>
-      <h4>Joe Mama</h4>
-      <h5>Look, a joe mama joke in 2026!</h5>
-      <h6>Get him!!!!</h6>
-      <p class="red">I'm so evil!!!</p>
-      <p>I made the background <span class=black>black!!</span></p>
-      <p>I<br>am<br>so<br>tall<br>!!!</p>
-      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"">This is a link.<br></a>
-      <button onclick="window.location.href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'">This is a button!<br></button>
-      <br><img src="cat.jpg" alt="A picture of a cat" width="200" height="200">
-      <br><img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google Logo" width="400" height="200">
-      <br><p><b>Who thought</b> <i>it was</i> <code>a good idea</code> <b><i>to add Markdown?</i></b></p>
-      <br><p>I'm so tired of this.</p>
-      <br><p>What do you think of my wallpaper?</p>
-      <img src="Tower.png" alt="My wallpaper" width="960" height="540"><br>
-      <button onclick="document.getElementById('wpresponse').innerHTML = 'I knew you would say that!';document.getElementById('wpresponse').scrollIntoView({behavior:'smooth'})">Yes</button><button onclick="document.getElementById('wpresponse').innerHTML = 'Hey!';document.getElementById('wpresponse').scrollIntoView({behavior:'smooth'})">No</button>
-      <br><p id=wpresponse></p>
-      <button onclick="scrollToTop()" id="backtotop">Back to Top</button>
-      <script>
-        let scrollRestrict = true
-        function scrollToTop() {
-          window.scrollTo({top: 0, behavior: 'smooth'});
-        };
-        
-        window.onscroll = function() {
-          restrictScroll();
-        };
-
-        function restrictScroll() {
-          const btn = document.getElementById('backtotop');
-          if (scrollRestrict && btn) {
-            if (window.scrollY > btn.offsetTop) {
-              window.scrollTo(0, btn.offsetTop);
+    <head>
+        <meta lang=en name="Task Manager" content="A tool to manage your tasks" charset="utf-8">
+        <title>Task Manager</title>
+        <style>
+            .black {
+                color: #676767;
+            }
+            .centered{
+                text-align: center;
+            }
+            body{
+                background-color: #000000;
+                color: #ffffff;
+            }
+            h1{
+                color: #00ff00;
+            }
+            .red{
+                color: #ff0000
+            }
+        </style>
+    </head>
+    <body>
+        <div class="centered">
+            <h1>Your tasks</h1>
+            <h2>ICT Tools</h2>
+            <h3>Design Thinking</h3>
+            <h4>Joe Mama</h4>
+            <h5>Look, a joe mama joke in 2026!</h5>
+            <h6>Get him!!!!</h6>
+            <p class="red">I'm so evil!!!</p>
+            <p>I made the background <span class=black>black!!</span></p>
+            <p>I<br>am<br>so<br>tall<br>!!!</p>
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"">This is a link.<br></a>
+            <button onclick="window.location.href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'">This is a button!<br></button>
+            <br><img src="cat.jpg" alt="A picture of a cat" width="200" height="200">
+            <br><img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google Logo" width="400" height="200">
+            <br><p><b>Who thought</b> <i>it was</i> <code>a good idea</code> <b><i>to add Markdown?</i></b></p>
+            <br><p>I'm so tired of this.</p>
+            <br><p>What do you think of my wallpaper?</p>
+            <img src="Tower.png" alt="My wallpaper" width="960" height="540"><br>
+            <button onclick="document.getElementById('wpresponse').innerHTML = 'I knew you would say that!';document.getElementById('wpresponse').scrollIntoView({behavior:'smooth'})">Yes</button><button onclick="document.getElementById('wpresponse').innerHTML = 'Hey!';document.getElementById('wpresponse').scrollIntoView({behavior:'smooth'})">No</button>
+            <br><p id=wpresponse></p>
+            <button onclick='scrollToTop()' id=backtotop'>Back to Top</button><br>
+            <button onclick='window.location.href = "./part2.html"'>I can't fit everything in here so heres a button to lead you somewhere else</button>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        </div>
+        <script>
+            let scrollRestrict = true
+            function scrollToTop() {
+                window.scrollTo({top:0,behavior:'smooth'});
             };
-          };
-        };
-      </script>
-      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    </div>
-  </body>
+            scrollToTop()
+            function restrictScroll() {
+                // prevent scrolling below back to top button        
+                if (scrollRestrict) {
+                    if (window.scrollY > document.getElementById('backtotop').offsetTop) {
+                        window.scrollTo(0, document.getElementById('backtotop').offsetTop);
+                    };
+                };
+            };
+            window.addEventListener('scroll', restrictScroll)
+        </script>
+        <noscript>You need to enable JavaScript to use this website.</noscript>
+        <p>sup ur mom</p>
+    </body>
 </html>
