@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Part 4</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+      }
+      form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #ffffff;
+        color: #000000;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>You escaped!</h1>
+    <p>You have successfully escaped the safe zone.</p>
+    <p>You are now free to go wherever you want.</p>
+    <p>However, you are not done yet.</p>
+    <p>There are some options here.</p>
+    <p>(Who thought of that???)</p>
+    <form id=firstForm>
+      <label for="playedCeleste">Have you played Celeste before?</label>
+      <select id="playedCeleste">
+        <option value="Pick an option"></option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <button type=submit onclick="showNewForm()">Submit</button>
+    </form>
+    <script>
+      function showNewForm() {
+        if (document.getElementById("playedCeleste").value == "yes") {
+          document.getElementById("firstForm").innerHTML = "<p>You are a true gamer.</p>"
+          setTimeout(function() {
+            window.location.href = "./part5.html";
+          }, 2000)
+        }
+        else {
+          window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        }
+      }
+    </script>
+    <script src="global.js"></script>
+</html>

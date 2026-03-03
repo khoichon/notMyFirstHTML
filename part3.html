@@ -27,12 +27,15 @@
         alert("Oh no.");
         await sleep(1000);
         document.getElementById("body").innerHTML = "<img src=rickroll.jpg id=rickroll>";
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        const img = document.getElementById("rickroll");
-        img.width = width;
-        img.height = height;
+        width = window.innerWidth;
+        height = window.innerHeight;
+        document.getElementById("rickroll").innerHTML = `<img src=rickroll.jpg width=${width} height=${height}>`
+        await sleep(1000);
         alert("Oh no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no");
+        await sleep(1000);
+        alert("Come on! This place isn't safe anymore!")
+        window.location.href = "./part4.html";
       }
     </script>
+    <script src="global.js"></script>
   </body>

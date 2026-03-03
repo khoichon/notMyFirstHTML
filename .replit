@@ -3,7 +3,7 @@ modules = ["python-3.11", "web"]
 
 [nix]
 channel = "stable-24_11"
-packages = ["static-web-server", "imagemagick"]
+packages = ["static-web-server", "xcur2png", "nano", "xorg.xcursorgen"]
 
 [deployment]
 publicDir = "/"
