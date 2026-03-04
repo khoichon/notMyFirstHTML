@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Part 6</title>
+    <script src="./global.js"></script>
+    <!--random comment please ignore-->
+    <style>
+      body{
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center{
+        text-align: center;
+      }
+      .hidden{
+        display: none;
+      }
+      .visible{
+        display: block;
+      }
+      </style>
+  </head>
+  <body>
+    <div>
+      <h1>Part 6</h1>
+      <p>Hey look! a shopping list!</p>
+      <div id="shoppinglist">
+    </div>
+    <script>
+      function sleep(ms) {
+         return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      function typewriter(text, element, speed){
+         let i = 0;
+         let fullText = "";
+         let interval = setInterval(function(){
+            if (i < text.length) {
+               fullText += text.charAt(i);
+               element.innerHTML = fullText;
+               i++;
+            } else {
+               clearInterval(interval);
+            }
+         }, speed);
+      }
+      typewriter("<h3>My Shopping List</h3><ul><li>Milk</li><li>Eggs</li><li>Bread</li><li>Cheese</li><li>Butter</li><li>Chicken</li><li>Beef</li><li>Salmon</li><li>Intercontinental nuclear ballistic missile</li><li><a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'>A DVD</a></li></ul>", document.getElementById("shoppinglist"), 10)
+    </script>
+  </body>
+</html>
