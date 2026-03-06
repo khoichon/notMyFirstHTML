@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Part 7</title>
+    <style>
+      html{
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      table,th,td{
+        border: 1px solid white;
+        border-collapse: collapse;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Part 7</h1>
+    <script type=module>
+      function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      // List of visited people intro
+      // hide body tag
+      document.body.style.display = "none";
+      await sleep(1000);
+      alert("We're here.")
+      alert("The list of everyone who visited this place.")
+      alert("Let's see it...")
+      // unhide body tag
+      document.body.style.display = "block";
+    </script>
+    <table id=namelist>
+      <tr>
+        <th>Name</th>
+        <th>Class</th>
+        <th>CCA</th>
+      </tr>
+      <tr>
+        <td>Alexander</td>
+        <td>1C7</td>
+        <td>Infocomm</td>
+      </tr>
+      <tr>
+        <td>Khoi</td>
+        <td>1C6</td>
+        <td>Infocomm</td>
+      </tr>
+      <tr>
+        <td>Celeste</td>
+        <td>1C7</td>
+        <td>Dance</td>
+      </tr>
+      <tr>
+        <td>Chee Haw</td>
+        <td>1C6</td>
+        <td>Boys' Bridgade</td>
+      </tr>
+      <tr>
+        <td><a href="#" onclick="transition()">???</a></td>
+        <td><a href="#" onclick="transition()">???</a></td>
+        <td><a href="#" onclick="transition()">???</a></td>
+      </tr>
+      <script>
+        debounce = false
+        function sleep(ms) {
+           return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        async function transition() {
+          if (debounce) return
+          debounce=true
+          await sleep(1000)
+          alert("Have you really been here?")
+          alert("All these people...")
+          alert("They're all linked to one person.")
+          alert("The creator.")
+          await sleep(2000)
+          alert("Do you know why?")
+          alert("How?")
+          alert("Because...")
+          alert("If you somehow came here...")
+          alert("You are the last person.")
+          document.getElementById("namelist").innerHTML = document.getElementById("namelist").innerHTML + "<tr><td>You</td><td>???</td><td>???</td></tr>"
+          await sleep(1000)
+          alert("You are the last person.")
+          alert("The last person to visit this place.")
+          alert("The last person to see this list.")
+          alert("The last person to know the truth.")
+          alert("Bye.")
+          alert("See you soon, then.")
+          window.location.href = "./part8.html"
+        }
+      </script>
+      <script src="global.js"></script>
+    </table>
+  </body>
+</html>

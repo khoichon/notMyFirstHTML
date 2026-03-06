@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Part 8</title>
+    <script src="global.js"></script>
+    <style>
+      body{
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Random Login Screen</h1>
+    <form>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username"><br><br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password"><br><br>
+      <button type=button onclick="login()">Submit</button>
+    </form>
+    <script>
+      function downloadGeneratedFile(filename, content, type = 'text/plain') {
+        // Create a Blob object from the data
+        const blob = new Blob([content], { type: type });
+
+        // Create a temporary URL for the blob
+        const url = URL.createObjectURL(blob);
+
+        // Create a temporary link element
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+
+        // Programmatically trigger the download
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up by removing the link and revoking the object URL
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url); // Free up memory
+      }
+
+      let loginclue = `Dear ỳ̴̨̡̼̪̝̠̟͇̮̺̲̯̼̯͍͔̈̒̈́̈̄̌̈́ơ̵̢̝̭̱̹̖̙̬̞̖̰̤͍̟̪̣͒́́͌̾̽͐̉́̄͂͌͠͠ͅu̸͖͍̺͖̪̰͍͓̜̻̪͙̦͎͚̾͋͗̌̃̏̐̎̊͊͂͘̕͝r̸̡̛͇͍̩̹̰̥̤̾̓́̚ͅ ̷̱͖̟̘̿̓̓̍́̄̄̐̈̋̒̃̓̆̈̑̅̏̾̕͠n̴͈͕͖͖̓̈́͋̀͊͆̈́͊̂͜å̷̧̡̡̗̥͔̝̝̮͈͎͖͈̣̘͛͋̀͝m̷̛͖͍̖͔̜͙̫̹̻͉̱̪̞͂̀̅͐̈̓̽̄̍̕͜͠ẹ̴͓̳̭͙̻̤͚̆̓̑͗͗͊̀̋͌ͅͅ ̶̧͖̬̜̤̘̃͐h̴̨̨͔͉̭͖̬̠̦̼̠̗̪͇̪̄̽͛͜͜ͅͅȩ̵̡̮̩̜̩̩͍͇̪̳͔͉̞̰͕͉͙̫̋̎̿̈͌̆́̀̅̿̑̏͐̈́̌̂͘͝͠ͅͅr̴̨̢͖͓̻̬͇̟̤͙̙̭͈̬̬̱̈̆̄͛̔̈́͂́́͋̐͗͒̐̕ͅé̴͇̯̝̯͎͔̦͙̹̦̹̱̺̜͔̈̽̅̀͗͘͜͝͝,
+
+I hear you are at a login page.
+You might be confused by these steps.
+I have the credentials for you.
+
+  Username: neverTheEnd
+  Password: YouCantTryToEnd
+
+After you get in, it will show a loading screen.
+I will tell you more then.
+
+Dearest,
+ț̸̨̩̯̠͖̖̣͈̑ͅh̶̨̩̼̙̗̘̠̹̼̹̱̙̣̄̇̂͛̃͊́͊́͌̊̿̕̚͜͝ẻ̵̩̥̇̽̾͊̈́͑͋̕͝ ̷̧̜̹̖͙̲̼͙̼̖̩̙̭͙͔̐̑̋̿̍̓̚̚͠ą̴̨̞͈̦͍͍͎̼̮͙̥̝̜̮͙͐̏͆͆̀̾̈́̅̂́ų̸̢̤̝̦̺͇̣̠̳͎̜̻̦̄̊͂̔͌̀̈́̾͌̋̾̆͑͗͜͝͠ͅṱ̶̡̟͚͖̫͌͠ḩ̴̛͕̥̫̩͙͇̙̩̭̙͗͛͆̈́́̑̀̒͘ö̴̧͈͕̙̈̑̐͂̓̽r̸͔̀̔̋́͑̾͝`
+
+
+      
+      document.addEventListener("click", () => {
+          if (!sessionStorage.getItem("loginclue")) {
+            downloadGeneratedFile("loginclue.txt", loginclue)
+            sessionStorage.setItem("loginclue", "true")
+      }}, {once: true})
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+    <script>
+      function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      const STORED_HASH = "$2a$13$wDlzLVybkKYDP5X/t43QWurlgXLZ2Z18ANRaErLJw.B4/01Su9VIm";
+
+      async function login() {
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          if (username !== "neverTheEnd") {
+              alert("Wrong credentials."); return;
+          }
+
+          try {
+              // bcryptjs is available as 'bcrypt' when loaded from the CDN
+              const match = await new Promise((resolve, reject) => {
+                  bcrypt.compare(password, STORED_HASH, (err, res) => {
+                      if (err) reject(err);
+                      else resolve(res);
+                  });
+              });
+
+              if (match) {
+                  alert("Login successful!");
+                  await sleep(2000);
+                  window.location.href = "./part9.html";
+              } else {
+                  alert("Wrong credentials.");
+              }
+          } catch (e) {
+              console.error(e);
+              alert("An error occurred during login.");
+          }
+      }
+    </script>
+</html>

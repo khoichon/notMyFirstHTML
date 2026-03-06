@@ -28,24 +28,67 @@
       <p>Hey look! a shopping list!</p>
       <div id="shoppinglist">
     </div>
-    <script>
+    <script type=module>
       function sleep(ms) {
          return new Promise(resolve => setTimeout(resolve, ms));
       }
-      function typewriter(text, element, speed){
-         let i = 0;
-         let fullText = "";
-         let interval = setInterval(function(){
-            if (i < text.length) {
-               fullText += text.charAt(i);
-               element.innerHTML = fullText;
-               i++;
-            } else {
-               clearInterval(interval);
-            }
-         }, speed);
+      function typewriterHTML(html, element, speed, append = false) {
+          return new Promise((resolve) => {
+
+              if (!append) {
+                  element.innerHTML = html;
+              } else {
+                  element.insertAdjacentHTML("beforeend", html);
+              }
+
+              const walker = document.createTreeWalker(
+                  element,
+                  NodeFilter.SHOW_TEXT,
+                  null,
+                  false
+              );
+
+              let textNodes = [];
+              while (walker.nextNode()) {
+                  textNodes.push(walker.currentNode);
+              }
+
+              textNodes.forEach(node => {
+                  if (!node.originalText) {
+                      node.originalText = node.nodeValue;
+                      node.nodeValue = "";
+                  }
+              });
+
+              let nodeIndex = 0;
+              let charIndex = 0;
+
+              function type() {
+                  if (nodeIndex >= textNodes.length) {
+                      resolve(); // 👈 THIS is the magic
+                      return;
+                  }
+
+                  let currentNode = textNodes[nodeIndex];
+
+                  if (charIndex < currentNode.originalText.length) {
+                      currentNode.nodeValue += currentNode.originalText.charAt(charIndex);
+                      charIndex++;
+                      setTimeout(type, speed);
+                  } else {
+                      nodeIndex++;
+                      charIndex = 0;
+                      type();
+                  }
+              }
+
+              type();
+          });
       }
-      typewriter("<h3>My Shopping List</h3><ul><li>Milk</li><li>Eggs</li><li>Bread</li><li>Cheese</li><li>Butter</li><li>Chicken</li><li>Beef</li><li>Salmon</li><li>Intercontinental nuclear ballistic missile</li><li><a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'>A DVD</a></li></ul>", document.getElementById("shoppinglist"), 10)
+      await typewriterHTML("<label>My Shopping List</label><ul><li>Milk</li><li>Eggs</li><li>Bread</li><li>Cheese</li><li>Butter</li><li>Chicken</li><li>Beef</li><li>Salmon</li><li>Intercontinental nuclear ballistic missile</li><li><a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' style='color: #ffffff;text-decoration: none;' id=dvd>A DVD</a></li></ul>                                                                                                                                                        <br><p>I wonder what the DVD is for...</p>", document.getElementById("shoppinglist"),30)
+      document.getElementById("dvd").innerHTML = "<a href='./part7.html' style='color: #ffffff;text-decoration: none;'>A DVD</a>"
     </script>
+    <script src="global.js"></script>
+    </div>
   </body>
 </html>
