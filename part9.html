@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Part 9</title>
+    <style>
+      body{
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Show reflection -->
+    <h1>Part 9</h1>
+    <video src="./matrix.mp4" width="70%" height="70%" loop controls id=video></video>
+    <button id=startbtn>Click this to start video</button>
+    <script src="global.js"></script>
+    <script>
+      // wait until either video starts or button is clicked to hide controls (for video), hide button (for button) and start reflection
+      debounce = false;
+      async function startReflection() {
+        if (debounce) return;
+        debounce = true;
+        document.getElementById("video").controls = false;
+        document.getElementById("startbtn").style.display = "none";
+        // play song
+        if (!localStorage.getItem("disablesound")) {
+          const audio = new Audio("./Encounter.mp3");
+          audio.loop = true;
+          audio.play();
+        }
+        
+        // reflection
+        await sleep(1000);
+        alert("You are here.");
+        alert("Took you long enough.");
+        alert("Way too long...");
+        alert("Out of all the experiences you had...");
+        alert("It's honestly impressive you got this far.");
+        alert("It's best you enjoy this place while it lasts.");
+        alert("If it lasts.");
+        alert("Because...");
+        alert("You know what?");
+        alert("I don't think we have much time left.");
+        window.history.pushState({}, "", "hello.")
+        alert("So...")
+        window.history.pushState({}, "", "I know something.")
+        await sleep(5000)
+        window.history.pushState({},"","I know you are confused.")
+        alert("Wait.")
+        window.history.pushState({},"","Well")
+        alert("Is there something above me?")
+        window.history.pushState({},"","Oh no.")
+        await sleep(5000)
+        window.history.pushState({},"","We need to go.")
+        await sleep(2000)
+        window.history.pushState({},"","Once this changes, immediately reload.")
+        alert("Is that who I think it is?")
+        window.history.pushState({},"","part10.html")
+        alert("I'm not sure.")
+        alert("Wait.")
+        alert("Try reloading this page.")
+        alert("Maybe something changed?")
+      };
+      document.getElementById("video").addEventListener("play", startReflection);
+      document.getElementById("startbtn").addEventListener("click",startReflection);
+        </script>
+  </body>
+</html>

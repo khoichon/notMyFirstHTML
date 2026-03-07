@@ -23,27 +23,18 @@
     </form>
     <script>
       function downloadGeneratedFile(filename, content, type = 'text/plain') {
-        // Create a Blob object from the data
         const blob = new Blob([content], { type: type });
-
-        // Create a temporary URL for the blob
         const url = URL.createObjectURL(blob);
-
-        // Create a temporary link element
         const link = document.createElement('a');
         link.href = url;
         link.download = filename;
-
-        // Programmatically trigger the download
         document.body.appendChild(link);
         link.click();
-
-        // Clean up by removing the link and revoking the object URL
         document.body.removeChild(link);
-        URL.revokeObjectURL(url); // Free up memory
+        URL.revokeObjectURL(url);
       }
 
-      let loginclue = `Dear ỳ̴̨̡̼̪̝̠̟͇̮̺̲̯̼̯͍͔̈̒̈́̈̄̌̈́ơ̵̢̝̭̱̹̖̙̬̞̖̰̤͍̟̪̣͒́́͌̾̽͐̉́̄͂͌͠͠ͅu̸͖͍̺͖̪̰͍͓̜̻̪͙̦͎͚̾͋͗̌̃̏̐̎̊͊͂͘̕͝r̸̡̛͇͍̩̹̰̥̤̾̓́̚ͅ ̷̱͖̟̘̿̓̓̍́̄̄̐̈̋̒̃̓̆̈̑̅̏̾̕͠n̴͈͕͖͖̓̈́͋̀͊͆̈́͊̂͜å̷̧̡̡̗̥͔̝̝̮͈͎͖͈̣̘͛͋̀͝m̷̛͖͍̖͔̜͙̫̹̻͉̱̪̞͂̀̅͐̈̓̽̄̍̕͜͠ẹ̴͓̳̭͙̻̤͚̆̓̑͗͗͊̀̋͌ͅͅ ̶̧͖̬̜̤̘̃͐h̴̨̨͔͉̭͖̬̠̦̼̠̗̪͇̪̄̽͛͜͜ͅͅȩ̵̡̮̩̜̩̩͍͇̪̳͔͉̞̰͕͉͙̫̋̎̿̈͌̆́̀̅̿̑̏͐̈́̌̂͘͝͠ͅͅr̴̨̢͖͓̻̬͇̟̤͙̙̭͈̬̬̱̈̆̄͛̔̈́͂́́͋̐͗͒̐̕ͅé̴͇̯̝̯͎͔̦͙̹̦̹̱̺̜͔̈̽̅̀͗͘͜͝͝,
+      let loginclue = `Dear ỳ̴̨̡̼̪̝̠̟͇̮̺̲̯̼̯͍͔̈̒̈́̈̄̌̈́ơ̵̢̝̭̱̹̖̙̬̞̖̰̤͍̟̪̣͒́́͌̾̽͐̉́̄͂͌͠͠ͅu̸͖͍̺͖̪̰͍͓̜̻̪͙̦͎͚̾͋͗̌̃̏̐̎̊͊͂͘̕͝r̸̡̛͇͍̩̹̰̥̤̾̓́̚ͅ ̷̱͖̟̘̿̓̓̍́̄̄̐̈̋̒̃̓̆̈̑̅̏̾̕͠n̴͈͕͖͖̓̈́͋̀͊͆̈́͊̂͜å̷̧̡̡̗̥͔̝̝̮͈͎͖͈̣̘͛͋̀͝m̷̛͖͍̖͔̜͙̫̹̻͉̱̪̞͂̀̅͐̈̓̽̄̍̕͜͠ẹ̴͓̳̭͙̻̤͚̆̓̑͗͗͊̀̋͌ͅͅ ̶̧͖̬̜̤̘̃͐h̴̨̨͔͉̭͖̬̠̦̼̠̗̪͇̪̄̽͛͜͜ͅͅȩ̵̡̮̩̜̩̩͍͇̪̳͔͉̞̰͕͉͙̫̋̎̿̈͌̆́̀̅̿̑̏͐̈́̌̂͘͝͠ͅͅr̴̨̢͖͓̻̬͇̟̤͙̙̭͈̬̬̱̈̆̄͛̔̈́͂́́͋̐͗͒̐̕ͅé̴͇̯̝̯͎͔̦͙̹̦̹̱̺̜͔̈̽̅̀͗͘͜͝͝,
 
 I hear you are at a login page.
 You might be confused by these steps.
@@ -56,10 +47,8 @@ After you get in, it will show a loading screen.
 I will tell you more then.
 
 Dearest,
-ț̸̨̩̯̠͖̖̣͈̑ͅh̶̨̩̼̙̗̘̠̹̼̹̱̙̣̄̇̂͛̃͊́͊́͌̊̿̕̚͜͝ẻ̵̩̥̇̽̾͊̈́͑͋̕͝ ̷̧̜̹̖͙̲̼͙̼̖̩̙̭͙͔̐̑̋̿̍̓̚̚͠ą̴̨̞͈̦͍͍͎̼̮͙̥̝̜̮͙͐̏͆͆̀̾̈́̅̂́ų̸̢̤̝̦̺͇̣̠̳͎̜̻̦̄̊͂̔͌̀̈́̾͌̋̾̆͑͗͜͝͠ͅṱ̶̡̟͚͖̫͌͠ḩ̴̛͕̥̫̩͙͇̙̩̭̙͗͛͆̈́́̑̀̒͘ö̴̧͈͕̙̈̑̐͂̓̽r̸͔̀̔̋́͑̾͝`
+ț̸̨̩̯̠͖̖̣͈̑ͅh̶̨̩̼̙̗̘̠̹̼̹̱̙̣̄̇̂͛̃͊́͊́͌̊̿̕̚͜͝ẻ̵̩̥̇̽̾͊̈́͑͋̕͝ ̷̧̜̹̖͙̲̼͙̼̖̩̙̭͙͔̐̑̋̿̍̓̚̚͠ą̴̨̞͈̦͍͍͎̼̮͙̥̝̜̮͙͐̏͆͆̀̾̈́̅̂́ų̸̢̤̝̦̺͇̣̠̳͎̜̻̦̄̊͂̔͌̀̈́̾͌̋̾̆͑͗͜͝͠ͅṱ̶̡̟͚͖̫͌͠ḩ̴̛͕̥̫̩͙͇̙̩̭̙͗͛͆̈́́̑̀̒͘ö̴̧͈͕̙̈̑̐͂̓̽r̸͔̀̔̋́͑̾͝`
 
-
-      
       document.addEventListener("click", () => {
           if (!sessionStorage.getItem("loginclue")) {
             downloadGeneratedFile("loginclue.txt", loginclue)
@@ -83,9 +72,11 @@ ț̸̨̩̯̠͖̖̣͈̑ͅh̶̨̩̼̙̗̘̠̹̼̹̄̇̂͛̃͊́͊́͌̊̿̕̚͜͝
           }
 
           try {
-              // bcryptjs is available as 'bcrypt' when loaded from the CDN
+              // The CDN exposes bcryptjs as dcodeIO.bcrypt or sometimes just bcrypt
+              const bcryptLib = (typeof dcodeIO !== 'undefined' && dcodeIO.bcrypt) ? dcodeIO.bcrypt : bcrypt;
+
               const match = await new Promise((resolve, reject) => {
-                  bcrypt.compare(password, STORED_HASH, (err, res) => {
+                  bcryptLib.compare(password, STORED_HASH, (err, res) => {
                       if (err) reject(err);
                       else resolve(res);
                   });

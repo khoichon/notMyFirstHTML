@@ -20,7 +20,10 @@
             .red{
                 color: #ff0000
             }
+            
+
         </style>
+        
     </head>
     <body>
         <div class="centered">
@@ -44,10 +47,20 @@
             <button onclick="document.getElementById('wpresponse').innerHTML = 'I knew you would say that!';document.getElementById('wpresponse').scrollIntoView({behavior:'smooth'})">Yes</button><button onclick="document.getElementById('wpresponse').innerHTML = 'Hey!';document.getElementById('wpresponse').scrollIntoView({behavior:'smooth'})">No</button>
             <br><p id=wpresponse></p>
             <button onclick='scrollToTop()' id=backtotop'>Back to Top</button><br>
-            <button onclick='window.location.href = "./part2.html"'>I can't fit everything in here so heres a button to lead you somewhere else</button>
+            <label class="toggle-switch">Disable Sound?<br></label>
+              <input type="checkbox" id="disablesound" />
+            </label><br>
+            <br>
+            <button onclick='loadtopart2()'>I can't fit everything in here so heres a button to lead you somewhere else</button>
             <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
         </div>
         <script>
+            function loadtopart2() {
+                if (document.getElementById("disablesound").checked == true) {
+                    localStorage.setItem("disablesound", "true")
+                }
+                window.location.href = "./part2.html"
+            }
             let scrollRestrict = true
             function scrollToTop() {
                 window.scrollTo({top:0,behavior:'smooth'});

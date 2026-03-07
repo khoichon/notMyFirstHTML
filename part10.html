@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- This might be the most script-heavy page in the entire website. -->
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+     <title>Part 10</title>
+     <style>
+        body{
+          background-color: #000000;
+          color: #ffffff;
+          font-family: monospace;
+        }
+        .hidden{
+          visibility: hidden;
+        }
+        .visible{
+          display: block;
+        }
+        .center{
+          text-align: center;
+        }
+       button {
+         width: 80px;
+         height: 80px;
+         font-size: 24px;
+       }
+       .center {
+         display: flex;
+         justify-content: center; /* horizontal */
+         align-items: center;     /* vertical */
+         height: 100vh;
+       }
+      </style>
+  </head>
+  <body>
+    <!-- There's a ton of buttons in a 3x3 grid, but most of them is hidden, but it should still take up space -->
+    <table class="center">
+      <tr>
+        <td><button id="btn1" class="hidden"></button></td>
+        <td><button id="btn2" class="hidden"></button></td>
+        <td><button id="btn3" class="hidden"></button></td>
+      </tr>
+      <tr>
+        <td><button id="btn4" class="hidden"></button></td>
+        <td><button id="btn5"></button></td>
+        <td><button id="btn6" class="hidden"></button></td>
+      </tr>
+      <tr>
+        <td><button id="btn7" class="hidden"></button></td>
+        <td><button id="btn8" class="hidden"></button></td>
+        <td><button id="btn9" class="hidden"></button></td>
+      </tr>
+    </table>
+    <script src="global.js"></script>
+    <script>
+      usingPopup = true
+      // wait until btn5 is clicked
+      function setCorrectButtonAndWait(button,popup) {
+        return new Promise((resolve) => {
+
+          for (let i = 1; i <= 9; i++) {
+            const btn = document.getElementById("btn" + i);
+
+            if (i === button) {
+              btn.onclick = () => {
+                // focus popup
+                popup.focus();
+                resolve();
+              };
+            } else {
+              btn.onclick = () => {
+                window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+              };
+            }
+          }
+
+        });
+      }
+      document.getElementById("btn5").addEventListener("click", async function() {
+        // PLAY MUSIC immediately
+        if (!localStorage.getItem("disablesound")) {
+          window.part10Audio = new Audio("/part10.mp3");
+          window.part10Audio.loop = true;
+          try {
+            await window.part10Audio.play();
+          } catch(e) {
+            console.warn("Browser blocked autoplay, try clicking the button again");
+          }
+        }
+
+        // Open popup
+        let popup = window.open("./popups/part1.html", "popup", "width=400,height=400");
+        if (!popup) {
+          alert("Please allow popups for this website to continue.");
+          return;
+        }
+
+        // reload page if popup closed
+        popup.addEventListener("beforeunload", function() {
+          if (usingPopup) window.location.reload();
+        });
+
+        // show buttons
+        document.getElementById("btn2").classList.remove("hidden");
+        document.getElementById("btn8").classList.remove("hidden");
+
+        // write popup content
+        popup.document.write(`
+          <style>
+            body { background-color: #000000; color: #ffffff; font-family: monospace; }
+          </style>
+          <pre id="note">
+      You’re standing in the middle again.
+
+      Most people stare straight ahead,
+      as if the answer will walk toward them.
+
+      But this room feels taller than it should.
+
+      Something about the ceiling
+      makes it difficult to ignore.
+          </pre>
+          <script>
+            // Close popup if parent tab is closed
+            setInterval(function() {
+              try {
+                if (!window.opener || window.opener.closed) {
+                  window.close();
+                }
+              } catch (e) {
+                // Cross-origin error - parent is gone
+                window.close();
+              }
+            }, 1000);
+          </script>
+          <script src="./script.js">
+        `);
+        popup.document.close();
+        // add script check to popup
+        // wait for correct button
+        await setCorrectButtonAndWait(2, popup);
+      });
+      
+      
+    </script>
+  </body>
