@@ -1,0 +1,6 @@
+# ignore cursors and node directories
+cursors/
+node/
+package.json
+package-lock.json
+node_modules/
