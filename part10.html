@@ -13,6 +13,9 @@
         .hidden{
           visibility: hidden;
         }
+       .hitboxhidden{
+         display:none;
+       }
         .visible{
           display: block;
         }
@@ -105,42 +108,148 @@
         document.getElementById("btn8").classList.remove("hidden");
 
         // write popup content
-        popup.document.write(`
-          <style>
-            body { background-color: #000000; color: #ffffff; font-family: monospace; }
-          </style>
-          <pre id="note">
-      You’re standing in the middle again.
+    popup.document.write(`
+    <style>
+    body { background-color: #000000; color: #ffffff; font-family: monospace; }
+    </style>
 
-      Most people stare straight ahead,
-      as if the answer will walk toward them.
+    <pre id="note">
+    You’re standing in the center again.
 
-      But this room feels taller than it should.
+Most people keep their eyes level with the room,
+as if the answer will appear right in front of them.
 
-      Something about the ceiling
-      makes it difficult to ignore.
-          </pre>
-          <script>
-            // Close popup if parent tab is closed
-            setInterval(function() {
-              try {
-                if (!window.opener || window.opener.closed) {
-                  window.close();
-                }
-              } catch (e) {
-                // Cross-origin error - parent is gone
-                window.close();
-              }
-            }, 1000);
-          </script>
-          <script src="./script.js">
-        `);
+But sometimes the obvious place to start
+is simply above you.
+    </pre>
+
+    <script src="/popups/script.js"><\/script>
+    `);
         popup.document.close();
         // add script check to popup
         // wait for correct button
         await setCorrectButtonAndWait(2, popup);
+        popup.document.getElementById("note").innerHTML = `
+        The ceiling corner catches your attention.
+
+Light slips in from the upper edge of the room,
+but it fades as it drifts toward the left side.
+
+If you're looking for the next step,
+that corner might be worth checking.
+`;
+        // show left buttons
+        document.getElementById("btn1").classList.remove("hidden");
+        document.getElementById("btn4").classList.remove("hidden");
+        document.getElementById("btn7").classList.remove("hidden");
+        await setCorrectButtonAndWait(1, popup);
+        popup.document.getElementById("note").innerHTML = `
+        The wall on your left feels different.
+
+        Not broken,
+        not hidden,
+        just ignored.
+
+        People rarely bother to check that side,
+        which makes it a good place to look next.
+        `
+        // Show specifically the right button
+        document.getElementById("btn6").classList.remove("hidden");
+        document.getElementById("btn1").classList.remove("hidden");
+        await setCorrectButtonAndWait(4, popup);
+        popup.document.getElementById("note").innerHTML = `
+        You notice a faint scrape on the floor.
+
+        It starts near your feet
+        and drifts toward the corner
+        down and to the left.
+
+        Something definitely passed through there.
+        `
+        document.getElementById("btn3").classList.remove("hidden");
+        document.getElementById("btn4").classList.remove("hidden");
+        await setCorrectButtonAndWait(7, popup);
+        popup.document.getElementById("note").innerHTML = `
+        The floor creaks under your weight.
+
+        That sound makes you stop
+        and look down for a moment.
+
+        Maybe the next move
+        is somewhere below you.
+        `
+        document.getElementById("btn9").classList.remove("hidden");
+        document.getElementById("btn7").classList.remove("hidden");
+        await setCorrectButtonAndWait(8, popup);
+        popup.document.getElementById("note").innerHTML = `
+        A reflection flickers across the floor.
+
+        It disappears quickly,
+        but you catch where it came from.
+
+        Near the corner
+        down and to the right.
+        `
+        await setCorrectButtonAndWait(9, popup);
+        popup.document.getElementById("note").innerHTML = `
+        A faint draft brushes past your shoulder.
+
+        You turn slightly
+        and notice it coming from the wall
+        to your right.
+
+        It might be worth going that way.
+        `
+        await setCorrectButtonAndWait(6, popup);
+        popup.document.getElementById("note").innerHTML = `
+        The light shifts again.
+
+        For a second,
+        the upper corner of the room
+        to your right catches the glow.
+
+        It’s subtle,
+        but it’s definitely there.
+        `
+        await setCorrectButtonAndWait(3,popup)
+        // Hide everything except btn5
+        for (let i = 1; i <= 9; i++) {
+          if (i != 5) document.getElementById("btn" + i).classList.add("hitboxhidden");
+        }
+        popup.document.getElementById("note").innerHTML = `
+        You made it.
+
+        Most people stop halfway through,
+        assuming the directions mean nothing.
+        
+        But the room was guiding you
+        the entire time.
+        
+        You just had to follow where it pointed.`
+        await setCorrectButtonAndWait(5,popup)
+        usingPopup = false;
+        alert("Oh.")
+        alert("You're here.")
+        alert("That, like everything else, is quite impressive!")
+        alert("Most people stop halfway, overwhelmed or distracted.")
+        alert("But you made it this far.")
+        alert("You.")
+        alert("You noticed the subtle hints.")
+        alert("The faint pulls.")
+        alert("The corners taht others ignore.")
+        alert("Every step, every choice, was acknowledged.")
+        alert("The directions were all around you.")
+        alert("All you had to do was look.")
+        alert("Perhaps...")
+        alert("This could be another lesson.")
+        alert("Attention to detail matters more than brute effort.")
+        alert("Well, time is of the essence.")
+        alert("We should probably move on.")
+        alert("May we meet again.")
+        window.location.href = "./part11.html"
       });
       
       
     </script>
   </body>
+</html>
