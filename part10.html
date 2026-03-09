@@ -228,8 +228,12 @@ that corner might be worth checking.
         You just had to follow where it pointed.`
         await setCorrectButtonAndWait(5,popup)
         usingPopup = false;
-        popup.close();
-        window.location.href = "./part11.html";
+        setTimeout(() => {
+          if (popup && !popup.closed) {
+            popup.close();
+          }
+          window.location.href = "./part11.html";
+        }, 100);
       });
       
       
