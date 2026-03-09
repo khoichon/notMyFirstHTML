@@ -5,4 +5,9 @@ var checkParent = setInterval(function() {
         window.close();
     }
 }, 1000); // Check every second
-// If the popup is closed, close the parent window
+
+// Make a function that the parent window can use to eval javascript in the popup
+function evalInPopup(code) {
+    eval(code);
+}
+window.evalInPopup = evalInPopup;

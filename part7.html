@@ -41,12 +41,12 @@
       <tr>
         <td>Alexander</td>
         <td>1C7</td>
-        <td>Infocomm</td>
+        <td>Infocomm Club</td>
       </tr>
       <tr>
         <td>Khoi</td>
         <td>1C6</td>
-        <td>Infocomm</td>
+        <td>Infocomm Club</td>
       </tr>
       <tr>
         <td>Celeste</td>
@@ -92,7 +92,12 @@
           alert("Because...")
           alert("If you somehow came here...")
           alert("You are the last person.")
-          document.getElementById("namelist").innerHTML = document.getElementById("namelist").innerHTML + "<tr><td><a>You</a></td><td><a href='#' onclick='transition()'>???</a></td><td><a href='#' onclick='transition()''>???</a></td></tr>"
+          if (!localStorage.getItem("name")) {
+            document.getElementById("namelist").innerHTML = document.getElementById("namelist").innerHTML + "<tr><td><a>You</a></td><td><a href='#' onclick='transition()'>???</a></td><td><a href='#' onclick='transition()''>???</a></td></tr>"
+          }
+          else {
+            document.getElementById("namelist").innerHTML = document.getElementById("namelist").innerHTML + `<tr><td><a>${localStorage.getItem("name")}</a></td><td>${localStorage.getItem("class")}</td><td>${localStorage.getItem("cca")}</td></tr>`
+          }
           await sleep(1000)
           alert("You are the last person.")
           alert("The last person to visit this place.")

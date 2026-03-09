@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Part 12</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center {
+        display: flex;
+        justify-content: center; /* horizontal */
+        align-items: center;     /* vertical */
+        height: 100vh;
+      }
+      .hidden{
+        display:none;
+      }
+    </style>
+    <script src="global.js"></script>
+    <script>
+      async function intro() {
+        alert("You find yourself in a room")
+        alert("The room is filled with places where you can put things in.")
+        if (await openmsgquestion("Question","Do you know what that means?")) {
+          alert("Good.")
+          alert("Continue on.")
+          document.getElementById("maindiv").classList.remove("hidden");
+          return
+        }
+        alert("You don't?")
+        alert("Well, you're going to have to figure it out.")
+        alert("Well, just one thing...")
+        alert("You can just add your own things to the room.")
+        alert("As long as it accepts it.")
+        alert("Good luck then.")
+        document.getElementById("maindiv").classList.remove("hidden");
+      }
+      intro()
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <div class="hidden" id="maindiv">
+      <form>
+        <label for="name">What's your name?</label><br>
+        <input type="text" id="name" name="name"><br><br>
+        <label for="age">What's your age?</label><br>
+        <input type="number" id="age" name="age"><br>
+        <label for="class">What class are you in?</label>
+        <select id="class" name="class">
+        <option value="1">1C1</option><option value="2">1C2</option><option value="3">1C3</option><option value="4">1C4</option><option value="5">1C5</option><option value="6">1C6</option><option value="7">1C7</option><option value="8">1C8</option><option value="11">2I1</option><option value="12">2I2</option><option value="13">2I3</option><option value="14">2I4</option><option value="15">2I5</option><option value="16">2I6</option><option value="17">2I7</option><option value="18">2I8</option><option value="21">3R1</option><option value="22">3R2</option><option value="23">3R3</option><option value="24">3R4</option><option value="25">3R5</option><option value="26">3R6</option><option value="27">3R7</option><option value="28">3R8</option><option value="31">4E1</option><option value="32">4E2</option><option value="33">4E3</option><option value="34">4E4</option><option value="35">4E5</option><option value="36">4E6</option><option value="37">4E7</option><option value="38">4E8</option><option value="41">5E1</option>
+        </select> <br>
+          <label for="birthday">When is your birthday?</label>
+          <input type=date name=birthday id=birthday><br>
+          <label for="favcolor">What's your favourite color?</label>
+          <input type=color name=favcolor id=favcolor><br>
+          <label for="experience">What do you think of this so far (in slider form)</label>
+          <input type=range name=experience id=experience min=-100 max=100><br>
+          <label for="cca" name="cca" id=cca>What is your main CCA?</label>
+          <select>
+            <option value="Boys' Brigade">Boy' Brigade</option>
+            <option value="Girls' Brigade">Girls' Brigade</option>
+            <option value="NCC">NCC</option>
+            <option value="NPCC">NPCC</option>
+            <option value="Scouts">Scouts</option>
+            <option value="NCDCC">NCDCC</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Badminton">Badminton</option>
+            <option value="Table Tennis">Table Tennis</option>
+            <option value="Volleyball">Volleyball</option>
+            <option value="Chinese Orchestra">Chinese Orchestra</option>
+            <option value="Choir">Choir</option>
+            <option value="Dance">Dance</option>
+            <option value="Guzheng">Guzheng</option>
+            <option value="Symphonic Band">Symphonic Band</option>
+            <option value="Art Club">Art Club</option>
+            <option value="Chinese Society">Chinese Society</option>
+            <option value="ELDDs">ELDDS</option>
+            <option value="Infocomm Club">Infocomm Club (The Goat)</option>
+          </select>
+          <button type="button" onclick="submit()">
+          
+      </form>
+      <script>
+        function submit() {
+          localStorage.setItem("name", document.getElementById("name").value)
+          localStorage.setItem("age", document.getElementById("age").value)
+          localStorage.setItem("class", document.getElementById("class").value)
+          localStorage.setItem("birthday", document.getElementById("birthday").value)
+          localStorage.setItem("favcolor", document.getElementById("favcolor").value)
+          localStorage.setItem("experience", document.getElementById("experience").value)
+          localStorage.setItem("cca", document.getElementById("cca").value)
+          window.location.href = "./part13.html"
+        }
+      </script>
+    </div>
+  </head>
+</html>
