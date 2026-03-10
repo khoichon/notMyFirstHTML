@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Speedrun Results</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center{
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* horizontal */
+        align-items: center;     /* vertical */
+        height: 100vh
+      }
+    </style>
+  </head>
+  <body>
+    <script src="global.js"></script>
+    <div class=center>
+      <h1>Speedrun Results</h1>
+      
+      <p id=splitlist></p>
+      <p id=main></p>
+      <button onclick="window.location.href='./end.html'">Continue to end</button>
+    </div>
+    <script>
+      pauseSpeedrun()
+      let mainStart = parseInt(localStorage.getItem("speedrun_main"), 10);
+      let splits = JSON.parse(localStorage.getItem("speedrun_split"));
+
+      function format(ms) {
+        let h = Math.floor(ms / 3600000);
+        let m = Math.floor((ms % 3600000) / 60000);
+        let s = Math.floor((ms % 60000) / 1000);
+        let msr = ms % 1000;
+
+        return (
+          String(h).padStart(2,"0") + ":" +
+          String(m).padStart(2,"0") + ":" +
+          String(s).padStart(2,"0") + "." +
+          String(msr).padStart(3,"0")
+        );
+      }
+
+      let splitHTML = "";
+      let prev = mainStart;
+
+      for (let path in splits) {
+        let time = splits[path];
+        let segment = time - prev;
+
+        let page = path.replace(".html","").replace("/","");
+
+        splitHTML += `${page}: ${format(segment)}<br>`;
+
+        prev = time;
+      }
+
+      document.getElementById("splitlist").innerHTML = splitHTML;
+
+      // final time
+      let finalTime = Date.now() - mainStart;
+      document.getElementById("main").textContent = "Final Time: " + format(finalTime);
+        </script>
+  </body>
+</html>

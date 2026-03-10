@@ -36,7 +36,7 @@
             <p class="red">I'm so evil!!!</p>
             <p>I made the background <span class=black>black!!</span></p>
             <p>I<br>am<br>so<br>tall<br>!!!</p>
-            <a href=./settings.html>Settings</a>
+            <a href=./settings.html>Settings</a><br>
             <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"">This is a link.<br></a>
             <button onclick="window.location.href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'">This is a button!<br></button>
             <br><img src="cat.jpg" alt="A picture of a cat" width="200" height="200">
@@ -68,10 +68,7 @@
         </div>
         <script>
             function loadtopart2() {
-                if (document.getElementById("disablesound").checked == true) {
-                    localStorage.setItem("disablesound", "true")
-                }
-                window.location.href = "./part2.html"
+                window.location.href = "./menu.html"
             }
             let scrollRestrict = true
             function scrollToTop() {

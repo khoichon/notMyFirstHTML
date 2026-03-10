@@ -59,7 +59,7 @@
           <input type=range name=experience id=experience min=-100 max=100><br>
           <label for="cca" name="cca" id=cca>What is your main CCA?</label>
           <select>
-            <option value="Boys' Brigade">Boy' Brigade</option>
+            <option value="Boys' Brigade">Boys' Brigade</option>
             <option value="Girls' Brigade">Girls' Brigade</option>
             <option value="NCC">NCC</option>
             <option value="NPCC">NPCC</option>
@@ -78,8 +78,8 @@
             <option value="Chinese Society">Chinese Society</option>
             <option value="ELDDs">ELDDS</option>
             <option value="Infocomm Club">Infocomm Club (The Goat)</option>
-          </select>
-          <button type="button" onclick="submit()">
+          </select><br>
+          <button type="button" onclick="submit()">Submit</button>
           
       </form>
       <script>
@@ -91,7 +91,8 @@
           localStorage.setItem("favcolor", document.getElementById("favcolor").value)
           localStorage.setItem("experience", document.getElementById("experience").value)
           localStorage.setItem("cca", document.getElementById("cca").value)
-          window.location.href = "./part13.html"
+          
+          window.location.href = "./endhandler.html"
         }
       </script>
     </div>

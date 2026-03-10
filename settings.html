@@ -11,14 +11,51 @@
       }
       .center{
         display: flex;
+        flex-direction: column;
         justify-content: center; /* horizontal */
+        align-items: center;     /* vertical */
         height: 100vh
       }
     </style>
     <script src="global.js"></script>
   </head>
   <body>
-    <a href="./">Back to main menu (if speedrun timer is on, will start timer!)</a>
-    <div id=settings class=center></div>
+    <a href="./">Back to main menu (if speedrun timer is on, will reset and start timer!)</a>
+    <div id=settings class=center>
+      <br>
+      <input type=checkbox id=disablesound><label for=disablesound>Disable sound</label>
+      <br>
+      <input type=checkbox id=enabletimer><label for=enabletimer>Enable Speedrun Timer</label>
+      <br>
+      <input type=checkbox id=timersplits><label for=timersplits>Show individual splits</label>
+      <br>
+      <button onclick="save()">Save and return to home page (warning! speedrun timer will start once this button is clicked)</button>
+    </div>
+    <script>
+      pauseSpeedrun()
+      
+      function save() {
+        if (document.getElementById("disablesound").checked == true) {
+          localStorage.setItem("disablesound", "true")
+        }
+        else {
+          localStorage.removeItem("disablesound")
+        }
+        if (document.getElementById("enabletimer").checked == true) {
+          localStorage.setItem("speedrun", "true")
+          localStorage.removeItem("speedrun_main")
+        }
+        else {
+          localStorage.removeItem("speedrun")
+        }
+        if (document.getElementById("timersplits").checked == true) {
+          localStorage.setItem("speedrun_splits", "true")
+          localStorage.removeItem(`speedrun_split`)
+        }
+        else {
+          localStorage.removeItem("speedrun_splits")
+        }
+      }
+    </script>
   </body>
 </html>

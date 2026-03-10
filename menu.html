@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      </style>
+     <script src="global.js"></script>
+  </head>
+  <body>
+    <div id=main>
+      <h1>TwoShots</h1>
+      <a href="#" onclick="start()">Start</a>
+      <a href="#" onclick="showsettings()">Settings</a>
+      <a href=/>Back to main page</a>
+      </div>
+    <div id=settings style="display: none;">
+      <h1>Settings</h1>
+      <label for="disablesound">Disable sound</label>
+      <input type="checkbox" id="disablesound" name="disablesound" onclick="localStorage.setItem('disablesound', this.checked);">
+      <br>
+      <label for="speedrun">Enable Speedrun Timer</label>
+      <input type="checkbox" id="speedrun" name="speedrun" onclick="localStorage.setItem('speedrun', this.checked);">
+      <br>
+      <label for="speedrun_splits">Enable Speedrun Splits</label>
+      <input type="checkbox" id="speedrun_splits" name="speedrun_splits" onclick="localStorage.setItem('speedrun_splits', this.checked);">
+      <a href="#" onclick="showmain()">Back</a>
+    </div>
+  </body>
+  <script src="global.js"></script>
+  <script>
+    async function start() {
+      await sleep(1000);localStorage.removeItem('speedrun_main');localStorage.removeItem('speedrun_split');window.location.href = "./part2.html"
+    }
+    let menuMusicStarted = false;
+
+    const userInteractions = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+
+    userInteractions.forEach(eventType => {
+      window.addEventListener(eventType, () => {
+        if (!menuMusicStarted && localStorage.getItem("disablesound") !== "true") {
+          window.mainaudio = new Audio("/menu.mp3");
+          window.mainaudio.loop = true;
+          window.mainaudio.play();
+          menuMusicStarted = true; // ✅ ensure only one instance
+        }
+      }, { passive: true });
+    });
+    function showsettings() {
+      document.getElementById("main").style.display = "none";
+      document.getElementById("settings").style.display = "block";
+    }
+    function showmain() {
+      document.getElementById("settings").style.display = "none";
+      document.getElementById("main").style.display = "block";
+    }
+    async function playSound(bufferPromise, volume = 1.0) {
+        const buffer = await bufferPromise;
+        const source = audioContext.createBufferSource();
+        source.buffer = buffer;
+
+        // Create a gain node for volume control
+        const gainNode = audioContext.createGain();
+        gainNode.gain.value = volume; // 1.0 = full volume, 0.5 = half, 0.1 = quiet whisper
+
+        // Connect source → gain → destination
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        source.start(0);
+    }
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    async function loadAudioBuffer(url) {
+      const response = await fetch(url);
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      return audioBuffer;
+    }
+    document.getElementById('disablesound').checked = localStorage.getItem('disablesound') === 'true';
+    document.getElementById('speedrun').checked = localStorage.getItem('speedrun') === 'true';
+    document.getElementById('speedrun_splits').checked = localStorage.getItem('speedrun_splits') === 'true';
+    
+    window.menuclick=loadAudioBuffer("/menu_cursor.wav")
+    window.buttonclick=loadAudioBuffer("/menu_decision.wav")
+    window.addEventListener("click", (event) => {
+        const target = event.target.closest('a, button, input');
+        if (localStorage.getItem("disablesound") !== "true" &&
+            !(target && (target.tagName === 'A' || target.tagName === "BUTTON"))) {
+            playSound(window.menuclick,0.5);
+        }
+    });
+    document.addEventListener('click', function(event) {
+        // .closest() ensures we catch clicks even if they land on an icon inside a button
+        const target = event.target.closest('a, button, input');
+
+        if (target) {
+            console.log("Clicked element type:", target.tagName);
+            console.log("Clicked element ID:", target.id);
+
+            // Example: Handle links specifically
+            if (target.tagName === 'A' || target.tagName === "BUTTON") {
+                
+                playSound(window.buttonclick,0.5)
+            }
+        }
+    });
+      </script>
+</html>

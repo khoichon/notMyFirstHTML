@@ -36,6 +36,7 @@
       </style>
   </head>
   <body>
+    <script src=global.js></script>
     <!-- There's a ton of buttons in a 3x3 grid, but most of them is hidden, but it should still take up space -->
     <table class="center">
       <tr>
@@ -45,7 +46,7 @@
       </tr>
       <tr>
         <td><button id="btn4" class="hidden"></button></td>
-        <td><button id="btn5"></button></td>
+        <td><button id="btn5"></button><button id="btn10" class=hitboxhidden></button></td>
         <td><button id="btn6" class="hidden"></button></td>
       </tr>
       <tr>
@@ -80,6 +81,8 @@
         });
       }
       document.getElementById("btn5").addEventListener("click", async function() {
+        // pause timer
+        pauseSpeedrun();
         // PLAY MUSIC immediately
         if (!localStorage.getItem("disablesound")) {
           window.part10Audio = new Audio("/part10.mp3");
@@ -126,7 +129,8 @@ is simply above you.
     <script src="/popups/script.js"><\/script>
     `);
         popup.document.close();
-        // add script check to popup
+        // unpause timer
+        window.resumeSpeedrun();
         // wait for correct button
         await setCorrectButtonAndWait(2, popup);
         popup.document.getElementById("note").innerHTML = `
@@ -214,7 +218,7 @@ that corner might be worth checking.
         await setCorrectButtonAndWait(3,popup)
         // Hide everything except btn5
         for (let i = 1; i <= 9; i++) {
-          if (i != 5) document.getElementById("btn" + i).classList.add("hitboxhidden");
+          document.getElementById("btn" + i).classList.add("hitboxhidden");
         }
         popup.document.getElementById("note").innerHTML = `
         You made it.
@@ -226,17 +230,14 @@ that corner might be worth checking.
         the entire time.
         
         You just had to follow where it pointed.`
-        await setCorrectButtonAndWait(5,popup)
-        usingPopup = false;
-        setTimeout(() => {
-          if (popup && !popup.closed) {
-            popup.close();
-          }
+        document.getElementById('btn10').classList.remove('hitboxhidden')
+        document.getElementById("btn10").onclick = () => {
+          usingPopup = false;
+          if (popup && !popup.closed) popup.close();
           window.location.href = "./part11.html";
-        }, 100);
-      });
+        };
       
-      
+          });
     </script>
   </body>
 </html>

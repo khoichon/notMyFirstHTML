@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>End Handler</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center{
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* horizontal */
+        align-items: center;     /* vertical */
+        height: 100vh
+      }
+    </style>
+  </head>
+  <body>
+    <script src="global.js"></script>
+    <h1>You will be redirected to the end page in <span id=countdown>5.000</span>...</h1>
+    <script>
+      let start = Date.now();
+      let duration = 5000;
+
+      setInterval(() => {
+        let remaining = duration - (Date.now() - start);
+        document.getElementById("countdown").innerHTML = (remaining / 1000).toFixed(3);
+
+        if (remaining <= 0) {
+          if (localStorage.getItem("speedrun") == "true") {
+            window.location.href = "./speedrunend.html";
+          } else {
+            window.location.href = "./end.html";
+          }
+        }
+      }, 16);
+    </script>
+</html>
