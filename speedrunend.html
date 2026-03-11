@@ -28,9 +28,19 @@
       <button onclick="window.location.href='./end.html'">Continue to end</button>
     </div>
     <script>
-      pauseSpeedrun()
+    document.addEventListener("DOMContentLoaded", () => {
+
+      // pause timer safely
+      if (window.pauseSpeedrun) window.pauseSpeedrun();
+
+      // get stored data
       let mainStart = parseInt(localStorage.getItem("speedrun_main"), 10);
-      let splits = JSON.parse(localStorage.getItem("speedrun_split"));
+      let splits = JSON.parse(localStorage.getItem("speedrun_split")) || {};
+
+      if (!mainStart || isNaN(mainStart)) {
+        document.getElementById("main").textContent = "No speedrun data found.";
+        return;
+      }
 
       function format(ms) {
         let h = Math.floor(ms / 3600000);
@@ -50,10 +60,14 @@
       let prev = mainStart;
 
       for (let path in splits) {
+
         let time = splits[path];
         let segment = time - prev;
 
-        let page = path.replace(".html","").replace("/","");
+        // clean page name
+        let page = path
+          .replace(".html","")
+          .replaceAll("/","");
 
         splitHTML += `${page}: ${format(segment)}<br>`;
 
@@ -65,6 +79,8 @@
       // final time
       let finalTime = Date.now() - mainStart;
       document.getElementById("main").textContent = "Final Time: " + format(finalTime);
-        </script>
+
+    });
+    </script>
   </body>
 </html>

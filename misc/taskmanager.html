@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      </style>
+  </head>
+  <body>
+    <script src="/global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <div id=tasks>
+      <h1>Task Manager</h1>
+      <p>This is the task manager. It is used to manage tasks.</p>
+      <p>You can add tasks by clicking the button below.</p>
+      <div id=addtaskdiv>
+        <input type=text id=taskname placeholder="Task Name">
+        <input type=text id=taskdesc placeholder="Task Description">
+        <input type="datetime-local" id=taskdue placeholder="Task Due Date">
+        <button id=addtask onclick="addTaskToList({name: document.getElementById('taskname').value, desc: document.getElementById('taskdesc').value, due: document.getElementById('taskdue').value});document.getElementById('taskname').value = '';document.getElementById('taskdesc').value = '';document.getElementById('taskdue').value = '';">Add Task</button>
+      </div>
+      <div id=tasklist></div>
+    </div>
+    <script>
+      // Load tasks from localStorage if there is
+      if (localStorage.getItem("tasks") == null) {
+        localStorage.setItem("tasks", JSON.stringify([]));
+      }
+      tasks = JSON.parse(localStorage.getItem("tasks"));
+      // Add tasks to the task list
+      function addTaskToList(task) {
+         let taskdiv = document.createElement("div");
+         taskdiv.innerHTML = `<h2>${task.name}</h2><p>${task.desc}</p><p>${task.due}</p>`;
+         taskdiv.style.border = "1px solid white";
+         document.getElementById("tasklist").appendChild(taskdiv);
+         // Add the task to localstorage and tasks list
+         tasks.push(task);
+         localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+      // Add existing tasks to list
+      for (let i = 0; i < tasks.length; i++) {
+        addTaskToList(tasks[i]);
+      }
+      
+    </script>
+  </body>
+</html>

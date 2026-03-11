@@ -70,7 +70,9 @@ function openmsgquestion(title, message) {
 // It will be updated every 10ms
 // It will be started when the player loads the page
 document.addEventListener("DOMContentLoaded", () => {
-
+  let path = window.location.pathname.includes('%20')
+    ? '/part9.html'
+    : window.location.pathname;
   if (localStorage.getItem("speedrun") !== "true") return;
 
   // create timer display
@@ -103,11 +105,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let splits = JSON.parse(localStorage.getItem("speedrun_split"));
 
-  if (!splits[window.location.pathname]) {
-    let splitStart = splits[window.location.pathname];
+  if (!splits[path]) {
+    let splitStart = splits[path];
 
     if (!splitStart || isNaN(splitStart)) {
-      splits[window.location.pathname] = Date.now();
+      splits[path] = Date.now();
       localStorage.setItem("speedrun_split", JSON.stringify(splits));
     }
     localStorage.setItem("speedrun_split", JSON.stringify(splits));
@@ -131,9 +133,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function update() {
 
     if (paused) return;
+    
 
     const mainStart = parseInt(localStorage.getItem("speedrun_main"), 10);
-    let path = window.location.pathname;
+    let path = window.location.pathname.includes('%20') 
+    ? '/part9.html' 
+    : window.location.pathname;
 
     if (!splits[path]) {
       splits[path] = Date.now();
@@ -162,7 +167,9 @@ document.addEventListener("DOMContentLoaded", () => {
   window.resumeSpeedrun = () => paused = false;
 
 });
-let path = window.location.pathname;
+let path = window.location.pathname.includes('%20') 
+? '/part9.html' 
+: window.location.pathname;
 
 if (path.endsWith("index.html")) {
   path = "/";
@@ -178,5 +185,154 @@ document.addEventListener("visibilitychange", () => {
 
 
 
-// Check if the user ever passed a part where you have to exit the page (eg. part5), if not, then redirect them to the index
+// alright now add an cursor effect to show a circular gradient from 100% (at cursor) to 0% (at 100px away). The colour is #ffff00
+// This is a very simple effect, but it looks nice
+// Can be enabled and disabled at will through window.enableCursorEffect() and window.disableCursorEffect()
+// You can edit properties with window.editCursorEffect(col,distance,opacity)
+// also create a canvas element to the screen for this effect
+function enableCursorEffect() {
+  if (window.cursorEffectEnabled) return;
+  window.cursorEffectEnabled = true;
 
+  const canvas = document.createElement("canvas");
+  canvas.style.position = "fixed";
+  canvas.style.top = "0";
+  canvas.style.left = "0";
+  canvas.style.pointerEvents = "none";
+  canvas.style.zIndex = "9999";
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext("2d");
+
+  window.cursorEffect = {
+    col: "#ffff00",
+    distance: 200,
+    opacity: 1,
+    canvas,
+    ctx,
+    lastX: 0,
+    lastY: 0
+  };
+
+  function draw(x, y) {
+    const { col, distance, opacity, ctx, canvas } = window.cursorEffect;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const gradient = ctx.createRadialGradient(x, y, 0, x, y, distance);
+    gradient.addColorStop(0, col + Math.round(opacity * 255).toString(16).padStart(2, "0"));
+    gradient.addColorStop(1, col + "00");
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  window.cursorEffect.draw = draw;
+
+  window.cursorEffect.mousemove = (e) => {
+    if (!window.cursorEffectEnabled) return;
+
+    window.cursorEffect.lastX = e.clientX;
+    window.cursorEffect.lastY = e.clientY;
+
+    draw(e.clientX, e.clientY);
+  };
+
+  window.cursorEffect.resize = () => {
+    if (!window.cursorEffectEnabled) return;
+
+    const { canvas } = window.cursorEffect;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    draw(window.cursorEffect.lastX, window.cursorEffect.lastY);
+  };
+
+  window.addEventListener("mousemove", window.cursorEffect.mousemove);
+  window.addEventListener("resize", window.cursorEffect.resize);
+}
+
+function disableCursorEffect() {
+  if (!window.cursorEffectEnabled) return;
+
+  window.cursorEffectEnabled = false;
+
+  document.body.removeChild(window.cursorEffect.canvas);
+  window.removeEventListener("mousemove", window.cursorEffect.mousemove);
+  window.removeEventListener("resize", window.cursorEffect.resize);
+}
+
+function editCursorEffect(col, distance, opacity) {
+  if (!window.cursorEffectEnabled) return;
+
+  if (col !== undefined) window.cursorEffect.col = col;
+  if (distance !== undefined) window.cursorEffect.distance = distance;
+  if (opacity !== undefined) window.cursorEffect.opacity = opacity;
+
+  const { lastX, lastY, draw } = window.cursorEffect;
+  draw(lastX, lastY); // redraw immediately
+}
+
+window.enableCursorEffect = enableCursorEffect;
+window.disableCursorEffect = disableCursorEffect;
+window.editCursorEffect = editCursorEffect;
+
+
+
+
+// Typewriter!!!
+function typewriterHTML(html, element, speed, append = false) {
+    return new Promise((resolve) => {
+
+        if (!append) {
+            element.innerHTML = html;
+        } else {
+            element.insertAdjacentHTML("beforeend", html);
+        }
+
+        const walker = document.createTreeWalker(
+            element,
+            NodeFilter.SHOW_TEXT,
+            null,
+            false
+        );
+
+        let textNodes = [];
+        while (walker.nextNode()) {
+            textNodes.push(walker.currentNode);
+        }
+
+        textNodes.forEach(node => {
+            if (!node.originalText) {
+                node.originalText = node.nodeValue;
+                node.nodeValue = "";
+            }
+        });
+
+        let nodeIndex = 0;
+        let charIndex = 0;
+
+        function type() {
+            if (nodeIndex >= textNodes.length) {
+                resolve();
+                return;
+            }
+
+            let currentNode = textNodes[nodeIndex];
+
+            if (charIndex < currentNode.originalText.length) {
+                currentNode.nodeValue += currentNode.originalText.charAt(charIndex);
+                charIndex++;
+                setTimeout(type, speed);
+            } else {
+                nodeIndex++;
+                charIndex = 0;
+                type();
+            }
+        }
+
+        type();
+    });
+}

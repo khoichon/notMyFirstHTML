@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Part 13</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center{
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* horizontal */
+        align-items: center;     /* vertical */
+        height: 100vh
+      }
+    </style>
+    <script src="global.js"></script>
+  </head>
+  <body>
+    <script>
+      async function intro() {
+        alert("Hello.")
+        alert("You have reached this far.")
+        alert("You deserve to have this.")
+        alert("It's the sun.")
+        alert("It is the only thing holding this place up.")
+        alert("If it breaks...")
+        alert("I don't want to think about it.")
+        alert("Here you go.")
+        window.editCursorEffect("#ffff00",0,1)
+        window.enableCursorEffect()
+        for (let i = 0; i < 200; i++) {
+          window.editCursorEffect("#ffff00",i,1)
+          await sleep(10)
+        }
+      }
+      intro()
+    </script>
+    <div class="center">
+      <h1>Part 13</h1>
+      <a href="./part14.html">Continue intro sequence</a>
+    </div>
+  </body>
+</html>

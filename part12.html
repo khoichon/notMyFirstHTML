@@ -42,7 +42,6 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <div class="hidden" id="maindiv">
-      <form>
         <label for="name">What's your name?</label><br>
         <input type="text" id="name" name="name"><br><br>
         <label for="age">What's your age?</label><br>
@@ -57,8 +56,8 @@
           <input type=color name=favcolor id=favcolor><br>
           <label for="experience">What do you think of this so far (in slider form)</label>
           <input type=range name=experience id=experience min=-100 max=100><br>
-          <label for="cca" name="cca" id=cca>What is your main CCA?</label>
-          <select>
+          <label for="cca" name="cca">What is your main CCA?</label>
+          <select id=cca>
             <option value="Boys' Brigade">Boys' Brigade</option>
             <option value="Girls' Brigade">Girls' Brigade</option>
             <option value="NCC">NCC</option>
@@ -81,7 +80,6 @@
           </select><br>
           <button type="button" onclick="submit()">Submit</button>
           
-      </form>
       <script>
         function submit() {
           localStorage.setItem("name", document.getElementById("name").value)
@@ -92,7 +90,7 @@
           localStorage.setItem("experience", document.getElementById("experience").value)
           localStorage.setItem("cca", document.getElementById("cca").value)
           
-          window.location.href = "./endhandler.html"
+          window.location.href = "./part13.html"
         }
       </script>
     </div>

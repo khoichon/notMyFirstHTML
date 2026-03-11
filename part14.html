@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Part 14</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center{
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* horizontal */
+        align-items: center;     /* vertical */
+        height: 100vh
+      }
+      .hidden{
+        visibility: hidden;
+      }
+    </style>
+    <script src="global.js"></script>
+  </head>
+  <body>
+    <div id=options class=center>
+      <button id=op1 class=hidden></button>
+      <button id=op2 class=hidden></button>
+      <button id=op3 class=hidden></button>
+      <button id=op4 class=hidden></button>
+    </div>
+    <script>
+      window.enableCursorEffect();
+      function waitForUserOption(op1,op2=null,op3=null,op4=null) {
+        return new Promise((resolve) => {
+          let options = [op1,op2,op3,op4];
+          for (let i = 0; i < options.length; i++) {
+            if (options[i] !== null) {
+              document.getElementById(`op${i+1}`).innerHTML = options[i];
+              document.getElementById(`op${i+1}`).classList.remove("hidden");
+              document.getElementById(`op${i+1}`).onclick = () => {
+                resolve(i+1);
+              }
+            }
+            else {
+              document.getElementById(`op${i+1}`).classList.add("hidden");
+            }
+          }
+        });
+      }
+      async function intro() {
+        alert("You're still here?");
+        alert("Well, I'm sure you have some questions.");
+        alert("I'll answer them.");
+        chosenOptions = []
+        // Loop until all options are chosen
+        while (chosenOptions.length < 3) {
+          let choice = await waitForUserOption("What is this place?","Why am I here?","What is the sun for?");
+          if (chosenOptions.includes(choice)) {
+            alert("You already chose that option.");
+            continue;
+          }
+          chosenOptions.push(choice);
+          if (choice == 1) {
+            alert("This place...")
+            alert("It was a bustling city once.")
+            alert("But now...")
+            alert("Ever since the anomalies started appearing, people have been disappearing.")
+            alert("We tried tracing the source, but all we have... is this.")
+            alert("It's a photo of Rick Astley.")
+            alert("I do not know what it means.")
+            alert("But maybe you do.")
+          }
+          else if (choice == 2) {
+            alert("You're here because you were the last person to enter the city.")
+            alert("You might already know, but this place is a simulation.")
+            alert("It was a simulation of a city.")
+            alert("But now...")
+            alert("It's not.")
+            alert("This world needs saving.")
+            if (chosenOptions.includes(3)) {
+              alert("You might know why.")
+              alert("I have already explained it to you.")
+            }
+            else {
+              alert("I have not explained it to you yet.")
+              alert("I will explain it to you later.")
+            }
+            alert("I can only wish you the best of luck.")
+          }
+           else {
+              alert("The sun is the only thing holding this place up.")
+              alert("If it breaks...")
+              alert("I don't want to think about it.")
+              alert("This world...")
+              alert("would end.")
+              alert("I don't know why, but the sun is the only thing that can save this world.")
+              alert("You're getting closer to the end.")
+              alert("You just need to put it in the tower up there, and it will bring light into the world.")
+              
+              
+            }
+          }
+        await sleep(1000)
+        alert("That's all I have to say.")
+        await sleep(2000)
+        alert("Oh yes, one more thing.")
+        alert("In some cases, the sun can flicker if it is near an anomaly.")
+        alert("It's not a big deal, but it's something to keep in mind.")
+        alert("Also, it does not happen in all cases.")
+        }
+      intro()
+    </script>
+  </body>
+</html>

@@ -30,6 +30,7 @@
         document.getElementById("countdown").innerHTML = (remaining / 1000).toFixed(3);
 
         if (remaining <= 0) {
+          window.pauseSpeedrun()
           if (localStorage.getItem("speedrun") == "true") {
             window.location.href = "./speedrunend.html";
           } else {
