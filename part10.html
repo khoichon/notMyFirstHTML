@@ -82,7 +82,7 @@
       }
       document.getElementById("btn5").addEventListener("click", async function() {
         // pause timer
-        pauseSpeedrun();
+        window.pauseSpeedrun();
         // PLAY MUSIC immediately
         if (!localStorage.getItem("disablesound")) {
           window.part10Audio = new Audio("/part10.mp3");
