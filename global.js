@@ -1,7 +1,7 @@
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
+window.sleep = sleep
 
 if (localStorage.getItem("notTheEnd") == "true" && !sessionStorage.getItem("notTheEnd")){
   localStorage.removeItem("notTheEnd");
