@@ -81,8 +81,7 @@
         });
       }
       document.getElementById("btn5").addEventListener("click", async function() {
-        // pause timer
-        window.pauseSpeedrun();
+        
         // PLAY MUSIC immediately
         if (!localStorage.getItem("disablesound")) {
           window.part10Audio = new Audio("/part10.mp3");
@@ -129,8 +128,7 @@ is simply above you.
     <script src="/popups/script.js"><\/script>
     `);
         popup.document.close();
-        // unpause timer
-        window.resumeSpeedrun();
+        
         // wait for correct button
         await setCorrectButtonAndWait(2, popup);
         popup.document.getElementById("note").innerHTML = `
