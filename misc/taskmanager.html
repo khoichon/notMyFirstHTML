@@ -10,44 +10,82 @@
         color: #ffffff;
         font-family: monospace;
       }
-      </style>
+    </style>
   </head>
   <body>
+
     <script src="/global.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <div id=tasks>
+    <script src="/misc/supabase.js"></script>
+
+    <div id="tasks">
       <h1>Task Manager</h1>
       <p>This is the task manager. It is used to manage tasks.</p>
       <p>You can add tasks by clicking the button below.</p>
-      <div id=addtaskdiv>
-        <input type=text id=taskname placeholder="Task Name">
-        <input type=text id=taskdesc placeholder="Task Description">
-        <input type="datetime-local" id=taskdue placeholder="Task Due Date">
-        <button id=addtask onclick="addTaskToList({name: document.getElementById('taskname').value, desc: document.getElementById('taskdesc').value, due: document.getElementById('taskdue').value});document.getElementById('taskname').value = '';document.getElementById('taskdesc').value = '';document.getElementById('taskdue').value = '';">Add Task</button>
+
+      <div id="addtaskdiv">
+        <input type="text" id="taskname" placeholder="Task Name"><br>
+        <textarea rows=5 cols=40 id="taskdesc" placeholder="Task Description"></textarea><br>
+        <label for="taskstart">Task Start Date</label>
+        <input type="datetime-local" id="taskstart" placeholder="Task Start Date"><br>
+        <label for="taskdue">Task Due Date</label>
+        <input type="datetime-local" id="taskdue" placeholder="Task Due Date"><br>
+
+        <button id="addtask"
+        onclick="addTaskToList({name: (localStorage.getItem('name'))?localStorage.getItem('name'):'anonymous',task: document.getElementById('taskname').value, desc: document.getElementById('taskdesc').value, time_end: document.getElementById('taskdue').value, time_start: document.getElementById('taskstart').value});document.getElementById('taskname').value = '';document.getElementById('taskdesc').value = '';document.getElementById('taskdue').value = '';document.getElementById('taskstart');'">
+        Add Task
+        </button>
       </div>
-      <div id=tasklist></div>
+
+      <div id="tasklist"></div>
     </div>
+
     <script>
-      // Load tasks from localStorage if there is
-      if (localStorage.getItem("tasks") == null) {
-        localStorage.setItem("tasks", JSON.stringify([]));
+
+      function renderTask(task) {
+
+        let tasklist = document.getElementById("tasklist");
+        let taskdiv = document.createElement("div");
+        taskdiv.style="border: 1px solid white; padding: 10px; margin: 10px;"
+        let timetaken = (new Date(task.time_end) - new Date(task.time_start)) / 1000 / 60
+        taskdiv.innerHTML = `
+          <h2>${task.task}</h2>
+          <p>${task.desc}</p>
+          <p>${task.time_start} to ${task.time_end} (${timetaken} minutes)</p>
+          <p>${task.name}'s task </p>
+          <button onclick="removeTask(${task.id});this.parentElement.remove();">Delete</button>
+        `;
+
+        tasklist.appendChild(taskdiv);
       }
-      tasks = JSON.parse(localStorage.getItem("tasks"));
-      // Add tasks to the task list
-      function addTaskToList(task) {
-         let taskdiv = document.createElement("div");
-         taskdiv.innerHTML = `<h2>${task.name}</h2><p>${task.desc}</p><p>${task.due}</p>`;
-         taskdiv.style.border = "1px solid white";
-         document.getElementById("tasklist").appendChild(taskdiv);
-         // Add the task to localstorage and tasks list
-         tasks.push(task);
-         localStorage.setItem("tasks", JSON.stringify(tasks));
+
+      async function addTaskToList(task) {
+
+        const result = await createTask(task);
+        const savedTask = result[0];
+
+        renderTask(savedTask);
+
+        return savedTask.id;
       }
-      // Add existing tasks to list
-      for (let i = 0; i < tasks.length; i++) {
-        addTaskToList(tasks[i]);
+
+      // Load tasks from Supabase
+      async function loadTasks() {
+
+        let tasks = await getTasks();
+
+        tasks.forEach(task => {
+          renderTask(task);
+        });
+
       }
-      
+
+      async function removeTask(id) {
+        await deleteTask(id);
+      }
+
+      loadTasks();
+
     </script>
+
   </body>
 </html>
