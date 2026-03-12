@@ -30,8 +30,7 @@
         <label for="taskdue">Task Due Date</label>
         <input type="datetime-local" id="taskdue" placeholder="Task Due Date"><br>
 
-        <button id="addtask"
-        onclick="addTaskToList({name: (localStorage.getItem('name'))?localStorage.getItem('name'):'anonymous',task: document.getElementById('taskname').value, desc: document.getElementById('taskdesc').value, time_end: document.getElementById('taskdue').value, time_start: document.getElementById('taskstart').value});document.getElementById('taskname').value = '';document.getElementById('taskdesc').value = '';document.getElementById('taskdue').value = '';document.getElementById('taskstart');'">
+        <button id="addtask" onclick="addTaskToList({name: (localStorage.getItem('name'))?localStorage.getItem('name'):'anonymous',task: document.getElementById('taskname').value, desc: document.getElementById('taskdesc').value, time_end: document.getElementById('taskdue').value, time_start: document.getElementById('taskstart').value});document.getElementById('taskname').value='';document.getElementById('taskdesc').value='';document.getElementById('taskdue').value='';document.getElementById('taskstart').value='';">
         Add Task
         </button>
       </div>
