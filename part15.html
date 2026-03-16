@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Part 15</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center{
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* horizontal */
+        align-items: center;     /* vertical */
+        height: 100vh
+      }
+      .hidden{
+        visibility: hidden;
+      }
+    </style>
+    <script src="global.js"></script>
+  </head>
+  <body>
+    <p class="center">Can we play outside?<br>please?</p>
+    <script>
+      window.enableCursorEffect();
+      // Request for notification permission
+      Notification.requestPermission().then((permission) => {
+         if (permission === "granted") {
+           // Create a notification
+           const notification = new Notification("Secret", {
+             body: "Please close the window?",
+             icon: "./icon.png" // Optional: URL of the notification icon
+           });
+         }
+      });
+      // activate service worker
+      navigator.serviceWorker.register('./sw/part15.js');
+      // Wait until the user closes the window before sending message to service worker
+      window.onbeforeunload = () => {
+        navigator.serviceWorker.controller.postMessage("close");
+        return null;
+      }
+    </script>
+</html>
