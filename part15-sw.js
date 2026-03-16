@@ -5,6 +5,7 @@ function sleep(ms) {
 // Main service worker for part 15 (notifications part)
 self.addEventListener('message', async function(event){
   if (event.data === "close") {
+    console.log("Starting notification puzzle")
     self.registration.showNotification("Secret", {
       body: "Okay, so now we cannot be overheard.",
       icon: "../icon.png" // Optional: URL of the notification icon
