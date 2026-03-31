@@ -13,15 +13,15 @@ async function sbRequest(path, options = {}) {
     ...options
   });
 
-  console.log("status:", res.status, "ok:", res.ok, "url:", res.url);
-  if (!res.ok) throw new Error(await res.text());
-  if (res.status === 204) return null;
+  if (!res.ok) {
+    throw new Error(await res.text());
+  }
 
   return res.json();
 }
 
 async function createTask(data) {
-  return sbRequest("tasks", {
+  return sbRequest("tasks_story", {
     method: "POST",
     headers: {
       ...headers,
@@ -32,58 +32,48 @@ async function createTask(data) {
 }
 
 async function getTasks() {
-  return sbRequest("tasks");
+  return sbRequest("tasks_story");
 }
 
 async function getTaskById(id) {
-  return sbRequest(`tasks?id=eq.${id}`);
+  return sbRequest(`tasks_story?id=eq.${id}`);
 }
 
 async function getTasksByName(name) {
-  return sbRequest(`tasks?name=eq.${encodeURIComponent(name)}`);
+  return sbRequest(`tasks_story?name=eq.${encodeURIComponent(name)}`);
 }
 
 async function updateTask(id, data) {
-  return sbRequest(`tasks?id=eq.${id}`, {
+  return sbRequest(`tasks_story?id=eq.${id}`, {
     method: "PATCH",
-    headers: {
-      ...headers,
-      "Prefer": "return=representation"
-    },
     body: JSON.stringify(data)
   });
 }
 
 async function deleteTask(id) {
-  const res = await fetch(`${SUPABASE_URL}/tasks?id=eq.${id}`, {
-    method: "DELETE",
-    headers: {
-      ...headers,
-      "Prefer": "return=minimal"
-    }
+  return sbRequest(`tasks_story?id=eq.${id}`, {
+    method: "DELETE"
   });
-  if (!res.ok) throw new Error(await res.text());
-  return null;
 }
 
 async function getTasksBetween(start, end) {
   return sbRequest(
-    `tasks?time_start=gte.${start}&time_end=lte.${end}`
+    `tasks_story?time_start=gte.${start}&time_end=lte.${end}`
   );
 }
 
 async function getTasksSorted(field = "time_start", dir = "asc") {
-  return sbRequest(`tasks?order=${field}.${dir}`);
+  return sbRequest(`tasks_story?order=${field}.${dir}`);
 }
 
 async function getLatestTasks(limit = 10) {
-  return sbRequest(`tasks?order=created_at.desc&limit=${limit}`);
+  return sbRequest(`tasks_story?order=created_at.desc&limit=${limit}`);
 }
 
 async function searchTasks(text) {
-  return sbRequest(`tasks?task=ilike.*${encodeURIComponent(text)}*`);
+  return sbRequest(`tasks_story?task=ilike.*${encodeURIComponent(text)}*`);
 }
 
 async function queryTasks(query) {
-  return sbRequest(`tasks?${query}`);
+  return sbRequest(`tasks_story?${query}`);
 }

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .glitch {
+        display: inline-block;          /* keeps width stable */
+        font-family: monospace;         /* optional, looks spookier */
+        white-space: pre;               /* preserves spacing */
+        min-width: max-content;         /* prevent squish */
+      }
+    </style>
+  </head>
+  <body>
+
+    <script src="./global.js"></script>
+    <script src="./supabase-p16.js"></script>
+
+    <div id="tasks">
+      <h1>Task Manager</h1>
+      <p>This is the task manager. It is used to <span class=glitch>manage tasks.</span></p>
+      <p>You can <span class=glitch>add tasks</span> by clicking the button below.</p>
+
+      <div id="addtaskdiv">
+        <input type="text" id="taskname" placeholder="Task Name" required><br>
+        <textarea rows=5 cols=40 id="taskdesc" placeholder="Task Description"></textarea><br>
+        <label for="taskstart">Task Start Date</label>
+        <input type="datetime-local" id="taskstart" placeholder="Task Start Date" required><br>
+        <label for="taskdue">Task Due Date</label>
+        <input type="datetime-local" id="taskdue" placeholder="Task Due Date" required><br>
+        <p style="color: red;" id="error" class=glitch></p><br>
+
+        <button id="addtask" onclick="document.getElementById('error').innerHTML='Something pushes you away from the button.'">
+        Add Task
+        </button>
+      </div>
+
+      <div id="tasklist"></div>
+    </div>
+
+    <script>
+
+      function renderTask(task) {
+
+        let tasklist = document.getElementById("tasklist");
+        let taskdiv = document.createElement("div");
+        taskdiv.style="border: 1px solid white; padding: 10px; margin: 10px;"
+        let timetaken = (new Date(task.time_end) - new Date(task.time_start)) / 1000 / 60
+        taskdiv.innerHTML = `
+          <h2>${task.task}</h2>
+          <p>${task.desc}</p>
+          <p>${task.time_start} to ${task.time_end} (${timetaken} minutes)</p>
+          <p>${task.name}'s task </p>
+          <button onclick="document.getElementById('${task.id}').innerHTML='It doesn't work.'">Delete</button>
+          <p style=red id="${task.id}"></p>
+        `;
+
+        tasklist.appendChild(taskdiv);
+      }
+
+      // Load tasks from Supabase
+      async function loadTasks() {
+
+        let tasks = await getTasksSorted("created_at", "asc");
+
+        tasks.forEach(task => {
+          renderTask(task);
+        });
+
+      }
+      loadTasks();
+      // Precompute stable Zalgo stacks for each character
+      const zalgoCache = {};
+      const zalgoChars = [
+        '\u0300','\u0301','\u0302','\u0303','\u0304','\u0305','\u0306','\u0307',
+        '\u0308','\u0309','\u030A','\u030B','\u030C','\u030D','\u030E','\u030F',
+        '\u0310','\u0311','\u0312','\u0313','\u0314','\u0315','\u0316','\u0317',
+        '\u0318','\u0319','\u031A','\u031B','\u031C','\u031D','\u031E','\u031F',
+        '\u0320','\u0321','\u0322','\u0323','\u0324','\u0325','\u0326','\u0327',
+        '\u0328','\u0329','\u032A','\u032B','\u032C','\u032D','\u032E','\u032F'
+      ];
+
+      function zalgoFixed(char, intensity=10){
+        if (!zalgoCache[char]){
+          let result = char;
+          for (let i = 0; i < intensity; i++){
+            result += zalgoChars[Math.floor(Math.random()*zalgoChars.length)];
+          }
+          zalgoCache[char] = result;
+        }
+        return zalgoCache[char];
+      }
+
+      function glitchText(){
+        const glitchElements = document.getElementsByClassName("glitch");
+
+        for (let el of glitchElements){
+          if (!el.dataset.original) el.dataset.original = el.innerText;
+
+          const text = el.dataset.original;
+          let newText = "";
+
+          for (let char of text){
+            // 80% chance to glitch each letter
+            newText += Math.random() < 0.8 ? zalgoFixed(char, 15) : char;
+          }
+
+          el.innerText = newText;
+        }
+      }
+
+      // Animate every 50ms
+      setInterval(glitchText, 50);
+    </script>
+
+  </body>
+</html>

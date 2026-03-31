@@ -3,6 +3,7 @@
     <head>
         <meta lang=en name="Task Manager" content="A tool to manage your tasks" charset="utf-8">
         <title>Task Manager</title>
+        <script src="global.js"></script>
         <style>
             .black {
                 color: #676767;
@@ -43,6 +44,8 @@
             <br><img src="cat.jpg" alt="A picture of a cat" width="200" height="200">
             <br><img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google Logo" width="400" height="200">
             <br><p><b>Who thought</b> <i>it was</i> <code>a good idea</code> <b><i>to add Markdown?</i></b></p>
+            <p>That isn't even Markdown!</p>
+            <p><i>Oh.</i></p>
             <br><p>I'm so tired of this.</p>
             <br><p>What do you think of my wallpaper?</p>
             <img src="Tower.png" alt="My wallpaper" width="960" height="540"><br>
@@ -52,11 +55,31 @@
             
             <p id=for_test></p>
             <script>
+                function getCapitalizations(str) {
+                  const results = [];
+                  const n = str.length;
+
+                  for (let i = 0; i < (1 << n); i++) {
+                    let variant = "";
+                    for (let j = 0; j < n; j++) {
+                      if (i & (1 << j)) {
+                        variant += str[j].toUpperCase();
+                      } else {
+                        variant += str[j].toLowerCase();
+                      }
+                    }
+                    results.push(variant);
+                  }
+
+                  return results;
+                }
+
+                const variations = getCapitalizations("Strawberry");
                 async function strawberryCrazyText() {
                     let text = ""
-                    fruit = ["Strawberry","STrawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry","strawberry",]
+                    fruit = getCapitalizations("strawberry")
                     for (let i = 0; i < fruit.length; i++) {
-                        text += fruit[i] + "<br>"
+                        text += fruit[i] + " "
                         document.getElementById("for_test").innerHTML = text
                         await sleep(500)
                     }
@@ -127,7 +150,6 @@
                 document.getElementById("cp5").outerHTML = '<a href="./part11.html">Checkpoint 5</a>'
             }
         </script>
-        <script src="global.js"></script>
         <a href="#" id="reset" style="background-color: red; color: white; border-radius: 10px; padding: 10px; text-decoration: none;" onclick="deleteProgress()"><b>Reset Progress</b></a>
         <script>
             function deleteProgress() {

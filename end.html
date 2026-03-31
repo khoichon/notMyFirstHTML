@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>End</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh
+      }
+      .canvas {
+        /* takes up entire body*/
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        
+      }
+    </style>
+    <script src=./global.js></script>
+  </head>
+  <body>
+    <button onclick=outro();>Click here to continue.</button>
+    <script>
+      function outro() {
+        enableCursorEffect();
+        document.querySelector("button").remove();
+        const video = document.createElement("video");
+        video.src = "./outro.mp4";
+        video.muted = false;
+        video.loop = false;
+
+        video.playsInline = true;
+
+        video.style.position = "fixed";
+        video.style.top = "0";
+        video.style.left = "0";
+        video.style.width = "100vw";
+        video.style.height = "100vh";
+        video.style.objectFit = "cover";
+        video.style.zIndex = "-1";
+        document.body.appendChild(video);
+ video.play().catch(err => console.log("blocked 😭", err));
+        alert("Hello.");
+        alert("Thank you for playing.");
+        alert("What was supposed to happen,");
+        alert("Was that credits were supposed to scroll.");
+        alert("Let's do that.");
+        // disable  mouse cursor effect after 16 seconds
+        video.ontimeupdate = () => {
+          if (video.currentTime >= 16) {
+            disableCursorEffect();
+            video.ontimeupdate = null; 
+          }
+        };
+        // wait 16 seconds for the real effect
+        await sleep(16000);
+        // floating windows will pass by the screen showing either a part of the previous sites, or rickroll.jpg. If it is rickroll.jpg, clicking on it will play square_death1.wav and close the window. When the window moves past the right border of the screen it will be removed.
+        // not applicable for mobile (why?)
+        // spawn until 50 seconds into the video
+
+        // Heres a list of all possible elements in html format:
+        const elements = [
+          // Part 2 - Flashbang
+          `<div style="background:#ffffff;color:#000000;padding:20px;font-family:monospace;"><h1 style="font-size:48px">FLASHBANG!!!!!</h1><button>Escape</button></div>`,
+          // Rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 3 - Safe Zone / rickroll reveal
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><h1>Safe Zone</h1><p>You're safe.</p><p>However, we don't have much time.</p><p>Meanwhile, here are some rewards!</p><button>Get Reward</button></div>`,
+          // Part 3 rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 4 - Celeste form
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><h1>You escaped!</h1><p>There are some options here.</p><div style="background:#fff;color:#000;padding:10px;"><label>Have you played Celeste before?</label><select><option>Yes</option><option>No</option></select><button>Submit</button></div></div>`,
+          // Rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 5 - Letter
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><h1>Part 5</h1><p>How far are we?</p><div style="background:#D2B48C;color:#000;padding:10px;border-radius:5px;font-size:10px;">RGVhciB5b3VyIG5hbWUgaGVyZQ==...</div><input type="text" placeholder="What... is this for?"></div>`,
+          // Part 6 - Shopping list
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><h1>Part 6</h1><p>Hey look! a shopping list!</p><h3>My Shopping List</h3><ul><li>Milk</li><li>Eggs</li><li>Bread</li><li>Intercontinental nuclear ballistic missile</li><li>A DVD</li></ul></div>`,
+          // Rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 7 - Name list
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><h1>Part 7</h1><table style="border-collapse:collapse;"><tr><th style="border:1px solid white;padding:5px;">Name</th><th style="border:1px solid white;padding:5px;">Class</th><th style="border:1px solid white;padding:5px;">CCA</th></tr><tr><td style="border:1px solid white;padding:5px;">Alexander</td><td style="border:1px solid white;padding:5px;">1C7</td><td style="border:1px solid white;padding:5px;">Infocomm Club</td></tr><tr><td style="border:1px solid white;padding:5px;">???</td><td style="border:1px solid white;padding:5px;">???</td><td style="border:1px solid white;padding:5px;">???</td></tr></table></div>`,
+          // Part 8 - Login screen
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><h1>Random Login Screen</h1><label>Username:</label><input type="text"><br><br><label>Password:</label><input type="password"><br><br><button>Submit</button></div>`,
+          // Rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 9 - Matrix / reflection
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><h1>Part 9</h1><div style="border:1px solid #00ff00;padding:10px;color:#00ff00;">▓▒░ MATRIX.MP4 ░▒▓</div><button>Click this to start video</button></div>`,
+          // Part 10 - Button grid
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><table><tr><td><button style="width:50px;height:50px;visibility:hidden;"></button></td><td><button style="width:50px;height:50px;visibility:hidden;"></button></td><td><button style="width:50px;height:50px;visibility:hidden;"></button></td></tr><tr><td><button style="width:50px;height:50px;visibility:hidden;"></button></td><td><button style="width:50px;height:50px;"></button></td><td><button style="width:50px;height:50px;visibility:hidden;"></button></td></tr><tr><td><button style="width:50px;height:50px;visibility:hidden;"></button></td><td><button style="width:50px;height:50px;visibility:hidden;"></button></td><td><button style="width:50px;height:50px;visibility:hidden;"></button></td></tr></table></div>`,
+          // Rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 11 - Rating
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><label>What do you think of this experience so far?</label><br><input type="radio"> Meh.<br><input type="radio"> It's alright, but can be improved<br><input type="radio"> I'm enjoying it!<br><input type="radio"> I'm really enjoying it!<br><input type="radio"> I'm loving it!<br><button>Click me!</button></div>`,
+          // Part 12 - User data form
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><label>What's your name?</label><br><input type="text"><br><label>What's your age?</label><br><input type="number"><br><label>What class are you in?</label><select><option>1C1</option><option>1C6</option><option>1C7</option></select><br><button>Submit</button></div>`,
+          // Rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 13 - Sun / cursor effect
+          `<div style="background:#000;color:#ffff00;padding:20px;font-family:monospace;text-align:center;"><h1>Part 13</h1><p style="font-size:48px;">☀</p><a href="#" style="color:#ffff00;">Continue intro sequence</a></div>`,
+          // Part 14 - Options
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><div style="display:flex;flex-direction:column;gap:10px;"><button>What is this place?</button><button>Why am I here?</button><button>What is the sun for?</button></div></div>`,
+          // Rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 15 - Can we play outside
+          `<div style="background:#000;color:#fff;padding:40px;font-family:monospace;text-align:center;"><p>Can we play outside?<br>please?</p></div>`,
+          // Part 16 - Task Manager / glitch
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;"><h1>Task Manager</h1><p>This is the task manager. It is used to <span style="font-family:monospace;">m̴̡a̷n̶a̵g̸e̷ ̴t̸a̸s̷k̵s̵.</span></p><div style="border:1px solid white;padding:10px;margin:10px;"><h2>Sample Task</h2><p>A task description</p><button>Delete</button></div></div>`,
+          // Rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 17 - Awkward
+          `<div style="background:#000;color:#fff;padding:20px;font-family:monospace;text-align:center;"><h1>Part 17</h1><p>Well... this is awkward.</p><p>I feel like a presence is watching us.</p></div>`,
+          // Part 18-intro
+          `<div style="background:#fff;color:#000;padding:40px;font-family:monospace;text-align:center;"><p style="font-size:24px;">[ click to begin ]</p></div>`,
+          // Rickroll
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          // Part 18 - Task layout
+          `<div style="background:#fff;color:#000;padding:20px;font-family:monospace;display:flex;gap:10px;"><div style="border:1px solid #ccc;padding:10px;flex:1;"><div>Navigation Bar</div><div>User Account</div></div><div style="border:1px solid #ccc;padding:10px;flex:1;">Tasks</div></div>`,
+          // Extra rickrolls sprinkled at the end
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+          `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
+        ]
+        
+        function newWindow() {
+          
+        }
+        while (video.currentTime) < 50 {
+          
+        }
+      }
+      
+    </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Part 17</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="center">
+      <h1>Part 17</h1>
+    </div>
+    <script src="../global.js"></script>
+    <script>
+      if (navigator.serviceWorker) {
+        navigator.serviceWorker.register('../sw.js');
+      }
+      async function dialog() {
+        alert("Nice.")
+        alert("We should be safe now.")
+        alert("Let's continue.")
+        alert("So, where was I?")
+        alert("Oh yes, the task manager.")
+        alert("I was going to tell you about it.")
+        alert("It was a tool to manage tasks.")
+        alert("However, one bot found a way to exploit it.")
+        alert("As you can tell from the current tasks there,")
+        alert("Something else was trying to warn you, but the bot...")
+        alert("The bot wanted you to come here.")
+        alert("You only had to remember like, one thing.")
+        alert("You are the god of this world.")
+        alert("However, you did not create it.")
+        alert("Someone else did, and the code was just flying around.")
+        alert("Until you came across it.")
+        alert("You were the one who put it together.")
+        alert("Sigh.")
+        await sleep(2000)
+        alert("You should have known.")
+        alert("By starting this world, you already dragged someone else with you.")
+        alert("Someone who was not meant to be here.")
+        alert("Well, we should definitely not let them know about this.")
+        alert("Let's continue.")
+        window.location.href = "../part18-intro.html"
+      }
+      dialog()
+    </script>
+  </body>
+</html>
