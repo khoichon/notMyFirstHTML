@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Close Tab</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh
+      }
+    </style>
+    <script src="./global.js"></script>
+  </head>
+  <body>
+    <div class=center>
+      <h1>Close Tab</h1>
+    </div>
+    <script>
+      async function init() {
+        await sleep(5000)
+        window.open("", "_self").close()
+      }
+      init()
+    </script>
+  </body>
+</html>

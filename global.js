@@ -336,3 +336,78 @@ function typewriterHTML(html, element, speed, append = false) {
         type();
     });
 }
+
+
+// okay time for more cursor effects yay :>
+const _cursorTextQueue = [];
+let _cursorTextRunning = false;
+
+async function cursorTextPopup(text, col = "#ffffff") {
+  _cursorTextQueue.push({ text, col });
+  if (_cursorTextRunning) return;
+  _cursorTextRunning = true;
+
+  while (_cursorTextQueue.length > 0) {
+    const { text, col } = _cursorTextQueue.shift();
+    await _runCursorTextPopup(text, col);
+  }
+  
+  _cursorTextRunning = false;
+}
+
+async function _runCursorTextPopup(text, col) {
+  // use cursorEffect canvas if available, otherwise make one
+  let canvas, ctx;
+
+  if (window.cursorEffect?.canvas) {
+    canvas = window.cursorEffect.canvas;
+    ctx = window.cursorEffect.ctx;
+  } else {
+    canvas = document.createElement("canvas");
+    canvas.style.cssText = "position:fixed;top:0;left:0;pointer-events:none;z-index:9999;";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    ctx = canvas.getContext("2d");
+  }
+
+  function getPos() {
+    const x = window.cursorEffect?.lastX ?? canvas.width / 2;
+    const y = window.cursorEffect?.lastY ?? canvas.height / 2;
+    return { x, y };
+  }
+
+  function draw(opacity) {
+    const { x, y } = getPos();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = Math.max(0, Math.min(1, opacity));
+    ctx.font = "40px monospace";
+    ctx.fillStyle = col;
+    ctx.fillText(text, x, y);
+    ctx.globalAlpha = 1;
+
+    // redraw cursor glow on top if it's active
+    if (window.cursorEffectEnabled && window.cursorEffect) {
+      const { col: glowCol, distance, opacity: glowOpacity } = window.cursorEffect;
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, distance);
+      gradient.addColorStop(0, glowCol + Math.round(glowOpacity * 255).toString(16).padStart(2, "0"));
+      gradient.addColorStop(1, glowCol + "00");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  // fade in
+  for (let opacity = 0; opacity <= 1; opacity += 0.05) {
+    draw(opacity);
+    await sleep(30);
+  }
+
+  // fade out
+  for (let opacity = 1; opacity >= 0; opacity -= 0.05) {
+    draw(opacity);
+    await sleep(30);
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}

@@ -21,10 +21,12 @@
       object-fit: cover;
     }
   </style>
+  <script src="./global.js"></script>
 </head>
 <body>
 
   <script>
+    enableCursorEffect();
     document.body.addEventListener('click', function handler() {
       document.body.removeEventListener('click', handler);
 

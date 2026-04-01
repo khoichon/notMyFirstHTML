@@ -20,6 +20,7 @@
         height: 100vh
       }
     </style>
+    <script src=./global.js></script>
   </head>
   <body>
     <div style="display: flex;
@@ -31,10 +32,36 @@
                   flex-direction: column;
                   width: 100%;
                   height: 100vh">
-        <div style="flex: 1">Navigation Bar</div>
-        <div style="flex: 1">User Account thingy</div>
+        <div style="flex: 1; border: 2px solid #ff0000; overflow:hidden;" id=navbar>Navigation Bar</div>
+        <div style="flex: 1; border: 2px solid #ff0000; overflow:hidden;" id=useracc>User Account thingy</div>
       </div>
-      <div style="flex: 1">Tasks</div>
+      <div style="flex: 1; border: 2px solid #ff0000; overflow:hidden;" id=tasks>Tasks</div>
     </div>
+    </div>
+    <script>
+      enableCursorEffect();
+      (async () => {
+        await sleep(2000);
+        document.getElementById("navbar").innerHTML = "<img src=./rickroll.jpg style='object-fit:cover;width:100%;height:100%;display:block;'>";
+        editCursorEffect("#ffff00", 150, 1);
+        await sleep(2000);
+        document.getElementById("useracc").innerHTML = "<img src=./rickroll.jpg style='object-fit:cover;width:100%;height:100%;display:block;'>";
+        document.getElementById("tasks").innerHTML = '<div style="flex: 1; border: 2px solid #ff0000; overflow:hidden;" id=tasks01></div><div style="flex: 1; border: 2px solid #ff0000; overflow:hidden;"id=tasks02></div>'
+        editCursorEffect("#ffff00", 100, 1);
+        await sleep(2000);
+        document.getElementById("tasks01").innerHTML = "<img src=./rickroll.jpg style='object-fit:cover;width:100%;height:100%;display:block;'>";
+        editCursorEffect("#ffff00", 50, 1);
+        await sleep(2000);
+        alert("Well, this is awkward.")
+        alert("This place seems to be affected more.")
+        alert("We should definitely go.")
+        alert("Wait!")
+        alert("Theres something to collect here.")
+        localStorage.setItem("checkpoint","2")
+        cursorTextPopup("Checkpoint!","#000000")
+        document.getElementById("tasks02").innerHTML = "<button style='width:100%;height:100%;' onclick='window.location.href=\"./part19.html\">Go to next part</button>"
+      })();
+        
+    </script>
   </body>
 </html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+
+    <script src="/global.js"></script>
+    <script src="/misc/supabase.js?v=2"></script>
+    <!-- navigation bar here -->
+    <nav style="background-color: #f2f2f2;padding:10px;text-align: center;"><button onclick="window.location.href='./page2.html'">Page 2</button></nav>
+
+    
+    <!-- actual task manager code here -->
+    <div id="tasks">
+      <h1>Task Manager</h1>
+      <p>This is the task manager. It is used to manage tasks.</p>
+      <p>You can add tasks by clicking the button below.</p>
+
+      <div id="addtaskdiv">
+        <input type="text" id="taskname" placeholder="Task Name" required><br>
+        <textarea rows=5 cols=40 id="taskdesc" placeholder="Task Description"></textarea><br>
+        <label for="taskstart">Task Start Date</label>
+        <input type="datetime-local" id="taskstart" placeholder="Task Start Date" required><br>
+        <label for="taskdue">Task Due Date</label>
+        <input type="datetime-local" id="taskdue" placeholder="Task Due Date" required><br>
+
+        <button id="addtask" onclick="addTaskToList({name: (localStorage.getItem('name'))?localStorage.getItem('name'):'anonymous',task: document.getElementById('taskname').value, desc: document.getElementById('taskdesc').value, time_end: document.getElementById('taskdue').value, time_start: document.getElementById('taskstart').value});document.getElementById('taskname').value='';document.getElementById('taskdesc').value='';document.getElementById('taskdue').value='';document.getElementById('taskstart').value='';">
+        Add Task
+        </button>
+      </div>
+
+      <div id="tasklist"></div>
+    </div>
+
+    <script>
+
+      function renderTask(task) {
+
+        let tasklist = document.getElementById("tasklist");
+        let taskdiv = document.createElement("div");
+        taskdiv.style="border: 1px solid white; padding: 10px; margin: 10px;"
+        let timetaken = (new Date(task.time_end) - new Date(task.time_start)) / 1000 / 60
+        taskdiv.innerHTML = `
+          <h2>${task.task}</h2>
+          <p>${task.desc}</p>
+          <p>${task.time_start} to ${task.time_end} (${timetaken} minutes)</p>
+          <p>${task.name}'s task</p>
+          <button onclick="(async (btn) => { await removeTask('${task.id}'); btn.parentElement.remove(); })(this);">Delete</button>
+        `;
+
+        tasklist.appendChild(taskdiv);
+      }
+
+      async function addTaskToList(task) {
+
+        const result = await createTask(task);
+        const savedTask = result[0];
+
+        renderTask(savedTask);
+
+        return savedTask.id;
+      }
+
+      // Load tasks from Supabase
+      async function loadTasks() {
+
+        let tasks = await getTasks();
+
+        tasks.forEach(task => {
+          renderTask(task);
+        });
+
+      }
+
+      async function removeTask(id) {
+        await deleteTask(id);
+      }
+
+      loadTasks();
+
+    </script>
+
+  </body>
+</html>

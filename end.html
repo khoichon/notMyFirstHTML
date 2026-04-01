@@ -32,7 +32,7 @@
   <body>
     <button onclick=outro();>Click here to continue.</button>
     <script>
-      function outro() {
+      async function outro() {
         enableCursorEffect();
         document.querySelector("button").remove();
         const video = document.createElement("video");
@@ -63,6 +63,38 @@
             video.ontimeupdate = null; 
           }
         };
+        // Wait until the video ends to continue
+        document.querySelector("video").addEventListener("ended", async () => {
+          // play music
+          await sleep(5000) // for timing
+          const music = new Audio("./inmemory.mp3");
+          music.loop = true;
+          music.play();
+          await sleep(3000)
+          alert("So...")
+          alert("Here you are.")
+          alert("At the end of the journey.")
+          alert("We already have gone very far.")
+          alert("On behalf of the team,")
+          alert("Thank you for playing.")
+          alert("We hope you enjoyed the experience.")
+          alert("And we hope you learned something from it.")
+          alert("Just remember...")
+          alert("This place only exists as a memory.")
+          alert("For Rue, a dream.")
+          alert("Like thousands of other dreams.")
+          alert("For you, a story.")
+          alert("Like thousands of other stories.")
+          alert("And for us, a project.")
+          alert("Like thousands of other projects.")
+          alert("But if we all remember this place,")
+          alert("Then I think, it will be fine.")
+          alert("Thank you.")
+          // learnt 5 months of random language for this
+          alert("Bon voyage.")
+          alert("Au revoir.")
+          alert("Bye!")
+        }, {once: true});
         // wait 16 seconds for the real effect
         await sleep(16000);
         // floating windows will pass by the screen showing either a part of the previous sites, or rickroll.jpg. If it is rickroll.jpg, clicking on it will play square_death1.wav and close the window. When the window moves past the right border of the screen it will be removed.
@@ -132,12 +164,100 @@
           `<img src="./rickroll.jpg" style="width:200px;height:200px;object-fit:cover;">`,
         ]
         
+        const popupWidth = 320;
+        const popupHeight = 280;
+        const moveSpeed = 3; // pixels per tick
+        const tickMs = 16;   // ~60fps
+
+        // listen for rickroll clicks from popups
+        window.addEventListener("message", (e) => {
+          if (e.data === "rickroll") {
+            const s = new Audio("./square_death1.wav");
+            s.play();
+          }
+        });
+
         function newWindow() {
-          
+          const el = elements[Math.floor(Math.random() * elements.length)];
+          const isRickroll = el.includes("rickroll.jpg");
+
+          // start just inside the right edge — spawning beyond screen.width
+          // causes some browsers to panic and go fullscreen. rude of them.
+          let x = screen.width - 10;
+          const y = Math.floor(Math.random() * (screen.height - popupHeight - 80)) + 40;
+
+          const popup = window.open(
+            "",
+            "_blank",
+            `width=${popupWidth},height=${popupHeight},left=${x},top=${y},toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no`
+          );
+
+          if (!popup) return; // blocked by browser, rip
+
+          // write content into the popup
+          popup.document.open();
+          popup.document.write(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #111;
+      color: #fff;
+      font-family: monospace;
+      overflow: hidden;
+      width: ${popupWidth}px;
+      height: ${popupHeight}px;
+      ${isRickroll ? "cursor:pointer;" : ""}
+    }
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    div { width: 100%; height: 100%; overflow: hidden; }
+  </style>
+</head>
+<body>
+  ${el}
+  ${isRickroll ? `<script>
+    document.body.addEventListener("click", () => {
+      window.opener && window.opener.postMessage("rickroll", "*");
+      window.close();
+    });
+  <\/script>` : ""}
+</body>
+</html>`);
+          popup.document.close();
+
+          // march the window leftward using moveTo
+          const interval = setInterval(() => {
+            if (!popup || popup.closed) {
+              clearInterval(interval);
+              return;
+            }
+            x -= moveSpeed;
+            try {
+              popup.moveTo(x, y);
+            } catch(e) {
+              clearInterval(interval);
+              return;
+            }
+            // close when fully off the left edge
+            if (x < -popupWidth - 20) {
+              clearInterval(interval);
+              popup.close();
+            }
+          }, tickMs);
         }
-        while (video.currentTime) < 50 {
-          
+
+        // spawn windows every 2-3 seconds until video hits 50s
+        async function spawnLoop() {
+          while (video.currentTime < 50) {
+            newWindow();
+            const delay = 2000 + Math.random() * 1000;
+            await sleep(delay);
+          }
         }
+
+        spawnLoop();
       }
       
     </script>
