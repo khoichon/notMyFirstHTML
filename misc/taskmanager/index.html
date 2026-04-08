@@ -5,10 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
     <style>
+      /* variable time!!
+      uh oh
+      wish me luck
+      */
+      :root{
+        --bg: #9EB7E5;
+        --text: #0C120C;
+        --primary: #648DE5;
+        --accent: #00FF6C;
+        --secondary: #320e3b;
+        --btn-text: #0C120C;
+        --danger: #ff0000;
+      }
+      .dark{
+        --bg:#0d1117;
+        --text:#00ff9c;
+        --primary:#262b32;
+        --secondary:#010409;
+        --accent:#00ff9c;
+        --btn-text:#0d1117;
+        --danger:#ff0000;
+      }
+      .alex{
+        --bg:#333232;
+        --text:#eeeeee;
+        --primary:#a06cd5;
+        --accent:#37ff8b;
+        --secondary:#778472;
+        --danger:#ff0022;
+      }
       body {
-        background-color: #000000;
-        color: #ffffff;
+        background-color: var(--bg);
+        color: var(--text);
         font-family: monospace;
+      }
+      button {
+        background-color: var(--accent);
+        color: var(--btn-text);
+        border: 1px solid var(--text);
+        padding: 5px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      nav {
+        background-color: var(--primary);
+        padding: 10px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      body.dark nav {
+        color: #320e3b;
+      }
+      input {
+        background-color: var(--primary);
+        color: var(--text);
+        border: 1px solid var(--text);
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px
+      }
+      textarea {
+        background-color: var(--primary);
+        color: var(--text);
+        border: 1px solid var(--text);
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px;
+      }
+      input[type="checkbox"] {
+        accent-color: var(--accent);
       }
     </style>
   </head>
@@ -17,7 +84,7 @@
     <script src="/global.js"></script>
     <script src="/misc/supabase.js?v=2"></script>
     <!-- navigation bar here -->
-    <nav style="background-color: #f2f2f2;padding:10px;text-align: center;"><button onclick="window.location.href='./page2.html'">Page 2</button></nav>
+    <nav id="navbar"><button onclick="window.location.href='./page2.html'" ">Page 2</button><button onclick="incrementtheme()">Toggle Style</button></nav>
 
     
     <!-- actual task manager code here -->
@@ -33,8 +100,9 @@
         <input type="datetime-local" id="taskstart" placeholder="Task Start Date" required><br>
         <label for="taskdue">Task Due Date</label>
         <input type="datetime-local" id="taskdue" placeholder="Task Due Date" required><br>
-
-        <button id="addtask" onclick="addTaskToList({name: (localStorage.getItem('name'))?localStorage.getItem('name'):'anonymous',task: document.getElementById('taskname').value, desc: document.getElementById('taskdesc').value, time_end: document.getElementById('taskdue').value, time_start: document.getElementById('taskstart').value});document.getElementById('taskname').value='';document.getElementById('taskdesc').value='';document.getElementById('taskdue').value='';document.getElementById('taskstart').value='';">
+        <label for="private">Private?</label>
+        <input type="checkbox" id="private" placeholder="Private?" required><br>
+        <button id="addtask">
         Add Task
         </button>
       </div>
@@ -42,7 +110,11 @@
       <div id="tasklist"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+      const supabaseUrl = 'https://digtgktzyxonguxhhdri.supabase.co'
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpZ3Rna3R6eXhvbmd1eGhoZHJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NDkzNzksImV4cCI6MjA4ODAyNTM3OX0.YYSwTR1Ns_zs7n5Brp6qTGZ1MYD_avfseMi1aGRcHGc'
+      const supabaseclient = supabase.createClient(supabaseUrl, supabaseKey)
 
       function renderTask(task) {
 
@@ -54,7 +126,7 @@
           <h2>${task.task}</h2>
           <p>${task.desc}</p>
           <p>${task.time_start} to ${task.time_end} (${timetaken} minutes)</p>
-          <p>${task.name}'s task</p>
+          <p>${task.name}'s task (${task.private?"private":"public"})</p>
           <button onclick="(async (btn) => { await removeTask('${task.id}'); btn.parentElement.remove(); })(this);">Delete</button>
         `;
 
@@ -71,15 +143,23 @@
         return savedTask.id;
       }
 
-      // Load tasks from Supabase
       async function loadTasks() {
+        const { data } = await supabaseclient.auth.getUser();
+        const email = data?.user?.email || null;
 
-        let tasks = await getTasks();
+        let query = supabaseclient.from('tasks').select('*');
 
-        tasks.forEach(task => {
-          renderTask(task);
-        });
+        if (email) {
+          query = query.or(`private.eq.false,name.eq.${email}`);
+        } else {
+          query = query.eq('private', false);
+        }
 
+        const { data: tasks, error } = await query;
+
+        if (error) { console.error(error); return; }
+
+        tasks.forEach(task => renderTask(task));
       }
 
       async function removeTask(id) {
@@ -88,7 +168,67 @@
 
       loadTasks();
 
-    </script>
 
+      async function checkLogin() {
+        const {data,error} = await supabaseclient.auth.getUser()
+        console.log(data)
+        if (data.user) {
+          document.getElementById("navbar").innerHTML += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--text)">Logged in as ${data.user.email}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="window.location.href='./profile.html'">Profile</button><button onclick="logout();">Logout</button>`
+        }
+        else {
+          document.getElementById("navbar").innerHTML += `<button onclick="window.location.href='./login.html'">Login</button>`
+        }
+      }
+      checkLogin()
+      async function logout() {
+        const {error} = await supabaseclient.auth.signOut()
+        if (error){
+          console.log(error)
+          alert("Error logging out: " + error.message)
+        }
+        window.location.reload()
+      }
+      async function addtask() {
+        const { data } = await supabaseclient.auth.getUser();
+        const email = data?.user?.email || 'anonymous';
+
+        if (email === 'anonymous' && document.getElementById('private').checked) {
+          alert("You must be logged in to create private tasks.");
+          return;
+        }
+        addTaskToList({
+          name: email,
+          task: document.getElementById('taskname').value,
+          desc: document.getElementById('taskdesc').value,
+          time_end: document.getElementById('taskdue').value,
+          time_start: document.getElementById('taskstart').value,
+          private: document.getElementById('private').checked
+        });
+
+        document.getElementById('taskname').value = '';
+        document.getElementById('taskdesc').value = '';
+        document.getElementById('taskdue').value = '';
+        document.getElementById('taskstart').value = '';
+      }
+      document.getElementById("addtask").addEventListener("click", addtask)
+    </script>
+    
+    <script>
+      themes = ["light","dark","alex"]
+      function loadTheme(){
+        let t = localStorage.getItem("theme") || "0";
+        document.body.className = themes[t];
+      }
+      function setTheme(t){
+        localStorage.setItem("theme", t);
+        loadTheme();
+      }
+      function incrementtheme(){
+        let t = localStorage.getItem("theme") || "0";
+        t = (parseInt(t) + 1) % themes.length;
+        localStorage.setItem("theme", t);
+      }
+      loadTheme();
+    </script>
   </body>
 </html>

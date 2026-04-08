@@ -46,7 +46,7 @@
         editCursorEffect("#ffff00", 150, 1);
         await sleep(2000);
         document.getElementById("useracc").innerHTML = "<img src=./rickroll.jpg style='object-fit:cover;width:100%;height:100%;display:block;'>";
-        document.getElementById("tasks").innerHTML = '<div style="flex: 1; border: 2px solid #ff0000; overflow:hidden;" id=tasks01></div><div style="flex: 1; border: 2px solid #ff0000; overflow:hidden;"id=tasks02></div>'
+        document.getElementById("tasks").innerHTML = '<div style="flex: 1; border: 2px solid #ff0000; overflow:hidden;" id=tasks01></div><div style="flex: 1; border: 2px solid #ff0000; overflow:hidden;" id=tasks02></div>'
         editCursorEffect("#ffff00", 100, 1);
         await sleep(2000);
         document.getElementById("tasks01").innerHTML = "<img src=./rickroll.jpg style='object-fit:cover;width:100%;height:100%;display:block;'>";
@@ -59,7 +59,7 @@
         alert("Theres something to collect here.")
         localStorage.setItem("checkpoint","2")
         cursorTextPopup("Checkpoint!","#000000")
-        document.getElementById("tasks02").innerHTML = "<button style='width:100%;height:100%;' onclick='window.location.href=\"./part19.html\">Go to next part</button>"
+        document.getElementById("tasks02").innerHTML = `<button style='width:100%;height:100%;' onclick='window.location.href="./part19.html"'>Go to next part</button>`
       })();
         
     </script>

@@ -3,7 +3,7 @@ modules = ["nodejs-20", "python-3.11", "web"]
 
 [nix]
 channel = "stable-24_11"
-packages = ["static-web-server", "xcur2png", "nano", "xorg.xcursorgen", "wget", "nettools", "iproute2", "lsof", "cope", "psmisc", "systemd"]
+packages = ["static-web-server", "xcur2png", "nano", "xorg.xcursorgen", "wget", "nettools", "iproute2", "lsof", "cope", "psmisc", "systemd", "undollar"]
 
 [deployment]
 publicDir = "/"

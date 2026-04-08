@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <h1>Task Manager</h1>
+    <p>Please login to continue.</p>
+    <form id="login">
+      <input type="text" name="username" placeholder="Username" required><br>
+      <input type="password" name="password" placeholder="Password" required><br>
+      <input type="submit" value="Login">
+    </form><p>To login, go to <a href="https://hashchat-server.onrender.com/">this site</a> to sign up.</p>
+    <script>
+      const supabaseUrl = 'https://digtgktzyxonguxhhdri.supabase.co'
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpZ3Rna3R6eXhvbmd1eGhoZHJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NDkzNzksImV4cCI6MjA4ODAyNTM3OX0.YYSwTR1Ns_zs7n5Brp6qTGZ1MYD_avfseMi1aGRcHGc'
+      const supabaseclient = supabase.createClient(supabaseUrl, supabaseKey)
+      document.getElementById("login").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const username = formData.get("username");
+        const password = formData.get("password");
+        const { data, error } = await supabaseclient.auth.signInWithPassword({
+          email: username,
+          password: password
+        });
+        if (error) {
+          console.error(error)
+          alert("Error logging in: " + error.message);
+          return;
+        }
+        window.location.href = "./index.html";
+      })
+    </script>
+  </body>  
+</html>

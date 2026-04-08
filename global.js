@@ -175,13 +175,30 @@ if (path.endsWith("index.html")) {
   path = "/";
 }
 
-// Pause timer when the user unloads (use visibilitychange instead))
+// Pause timer when the user unloads and resume timer when the user loads
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden"){
     pauseSpeedrun();
   }
+  else {if (document.visibilityState === "visible") {
+    resumeSpeedrun();
+  }}
 });
 
+// When user cursor hovers over the speedrun div hide it (use css)
+document.addEventListener("DOMContentLoaded", () => {
+  const element = document.getElementById("speedrun");
+  if (!element) return;
+
+  element.addEventListener('mouseenter', () => {
+    element.style.backgroundColor = 'blue'; // Style to apply on hover
+  });
+
+  element.addEventListener('mouseleave', () => {
+    element.style.backgroundColor = ''; // Revert style when leaving
+  });
+
+});
 
 
 
