@@ -96,7 +96,7 @@
 
       <div id="addtaskdiv">
         <input type="text" id="taskname" placeholder="Task Name" required><br>
-        <textarea rows=5 cols=40 id="taskdesc" placeholder="Task Description"></textarea><br>
+        <textarea rows=5 cols=40 id="taskdesc" placeholder="Task Description" required></textarea><br>
         <label for="taskstart">Task Start Date</label>
         <input type="datetime-local" id="taskstart" placeholder="Task Start Date" required><br>
         <label for="taskdue">Task Due Date</label>
@@ -161,7 +161,9 @@
         const { data: tasks, error } = await query;
 
         if (error) { console.error(error); return; }
-
+        navigator.serviceWorker.ready.then((sw) => {
+          sw.active.postMessage({ type: "SYNC_TASKS", tasks: tasks });
+        });
         tasks.forEach(task => renderTask(task));
       }
 
@@ -239,6 +241,9 @@
         document.getElementById('taskstart').value = '';
       }
       document.getElementById("addtask").addEventListener("click", addtask)
+
+      // load service worker
+      navigator.serviceWorker.register('./sw.js')
     </script>
     
     <script>

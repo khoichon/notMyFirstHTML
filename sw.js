@@ -96,3 +96,58 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(fetch(event.request));
 });
+
+
+// The next section is entirely for /misc/taskmanager
+// Every time the index.html page is loaded, it SHOULD send all the tasks over to the service worker
+// The service worker will then store them in the cache
+// The service worker will read from it, find the start and end times, and then send a notification when the task  starts and is due
+// ============================================================
+// TASK MANAGER - Receives tasks and schedules notifications
+// ============================================================
+
+const TASK_CACHE = "task-cache-v1"
+self.addEventListener("message", async (event) => {
+  if (event.data?.type !== "SYNC_TASKS") return;
+
+  const tasks = event.data.tasks;
+
+  // Store tasks in cache
+  const cache = await caches.open(TASK_CACHE);
+  await cache.put(
+    "/tasks",
+    new Response(JSON.stringify(tasks), {
+      headers: { "Content-Type": "application/json" },
+    })
+  );
+
+  // Schedule notifications for each task
+  tasks.forEach((task) => scheduleTaskNotifications(task));
+});
+
+function scheduleTaskNotifications(task) {
+  const now = Date.now();
+
+  const startTime = new Date(task.time_start).getTime();
+  const endTime = new Date(task.time_end).getTime();
+
+  // Notify when task starts
+  if (startTime > now) {
+    setTimeout(() => {
+      self.registration.showNotification("Task Starting!", {
+        body: `${task.task} is starting now!`,
+        tag: `start-${task.name}-${task.task}`,
+      });
+    }, startTime - now);
+  }
+
+  // Notify when task is due
+  if (endTime > now) {
+    setTimeout(() => {
+      self.registration.showNotification("Task Due!", {
+        body: `${task.task} is due now!`,
+        tag: `end-${task.name}-${task.task}`,
+      });
+    }, endTime - now);
+  }
+}

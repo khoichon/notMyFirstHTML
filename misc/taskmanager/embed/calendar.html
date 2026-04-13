@@ -498,7 +498,7 @@ function fmtDateTime(dt){
 function showModal(ev){
   document.getElementById('modalName').textContent = ev.name;
   document.getElementById('modalTime').textContent = fmtDateTime(ev.start) + (ev.end ? ' → ' + fmtTime(ev.end) : '');
-  document.getElementById('modalDesc').textContent = ev.desc || '(no description — just like skipping a B-side 😬)';
+  document.getElementById('modalDesc').textContent = ev.desc || '(no description, khoi is sad there is no food here.)';
   document.getElementById('eventModal').classList.add('open');
 }
 
@@ -623,7 +623,7 @@ function renderDay(){
   const dayEnd = new Date(d); dayEnd.setDate(dayEnd.getDate()+1);
   const dayEvs = eventsInRange(dayStart, dayEnd);
 
-  if(dayEvs.length === 0) html += '<div class="no-events" style="margin-top:80px">NO EVENTS · JUST LIKE CHAPTER 1 BEFORE BADELINE SHOWS UP</div>';
+  if(dayEvs.length === 0) html += '<div class="no-events" style="margin-top:80px">NO EVENTS - KHOI SAYS HI ANYWAYS (say hi back!) </div>';
 
   for(const ev of dayEvs){
     const evStart = ev.start < dayStart ? dayStart : ev.start;
@@ -723,8 +723,35 @@ if(initDate){ const d = new Date(initDate); if(!isNaN(d)){ cursor=d; cursor.setH
 
 render();
   window.addEventListener("message", (event) => {
+    // Handling the plethora of messages
     if (event.data?.type === "changestyle") {
       loadTheme(event.data.theme)
+    }
+    else if (event.data?.type === "month") {
+      view = "month";
+      setActiveBtn("btnMonth");
+      render();
+    }
+    else if (event.data?.type === "week") {
+      view = "week";
+      setActiveBtn("btnWeek");
+      render();
+    }
+    else if (event.data?.type === "day") {
+      view = "day";
+      setActiveBtn("btnDay");
+      render();
+    }
+    else if (event.data?.type === "today") {
+      cursor = new Date(); cursor.setHours(0,0,0,0); render();
+    }
+    else if (event.data?.type === "prev") {
+      navigate(-1);
+      render();
+    }
+    else if (event.data?.type === "next") {
+      navigate(1);
+      render();
     }
   });
 </script>
