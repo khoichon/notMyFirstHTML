@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+    <style>
+      /* variable time!!
+        uh oh
+        wish me luck
+        */
+      :root {
+        --bg: #9eb7e5;
+        --text: #0c120c;
+        --primary: #648de5;
+        --accent: #00ff6c;
+        --secondary: #320e3b;
+        --btn-text: #0c120c;
+        --danger: #ff0000;
+      }
+      .dark {
+        --bg: #0d1117;
+        --text: #00ff9c;
+        --primary: #262b32;
+        --secondary: #010409;
+        --accent: #00ff9c;
+        --btn-text: #0d1117;
+        --danger: #ff0000;
+      }
+      .alex {
+        --bg: #333232;
+        --text: #eeeeee;
+        --primary: #a06cd5;
+        --accent: #37ff8b;
+        --secondary: #778472;
+        --danger: #ff0022;
+        --btn-text: #333232;
+      }
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: monospace;
+        transition:background 0.3s,color 0.3s;
+      }
+      button {
+        background-color: var(--accent);
+        color: var(--btn-text);
+        border: 1px solid var(--text);
+        padding: 5px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      nav {
+        background-color: var(--primary);
+        padding: 10px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      body.dark nav {
+        color: #320e3b;
+      }
+      input {
+        background-color: var(--primary);
+        color: var(--text);
+        border: 1px solid var(--text);
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px;
+      }
+      textarea {
+        background-color: var(--primary);
+        color: var(--text);
+        border: 1px solid var(--text);
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px;
+      }
+      input[type="checkbox"] {
+        accent-color: var(--accent);
+      }
+    </style>
+  </head>
+  <body style="position: relative; margin: 0">
+    <nav>
+      <button onclick="window.location.href='./'">Back to Home</button>
+      <button id=changestyle>Toggle Style</button>
+    </nav>
+    <div style="display: flex; min-height: calc(100vh-50px)">
+      <div id="task" style="flex: 1; padding: 1rem">
+        <h1>Task Details</h1>
+        <h2 id="taskname"></h2>
+        <p id="taskdesc"></p>
+        <p id="tasktime"></p>
+        <p id="taskstatus"></p>
+        <button id="deletetask">Delete Task</button>
+        <button id="gcal">Add to Google Calendar</button>
+      </div>
+      <div id="calendarembed" style="flex: 2;resize:horizontal; overflow:auto; min-width:200px;"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+      const supabaseUrl = "https://digtgktzyxonguxhhdri.supabase.co";
+      const supabaseKey =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpZ3Rna3R6eXhvbmd1eGhoZHJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NDkzNzksImV4cCI6MjA4ODAyNTM3OX0.YYSwTR1Ns_zs7n5Brp6qTGZ1MYD_avfseMi1aGRcHGc";
+      const supabaseclient = supabase.createClient(supabaseUrl, supabaseKey);
+      const urlParams = new URLSearchParams(window.location.search);
+      const taskId = urlParams.get("id");
+      async function loadTask() {
+        const { data, error } = await supabaseclient
+          .from("tasks")
+          .select("*")
+          .eq("id", taskId)
+          .single();
+        if (error) {
+          console.error(error);
+          return;
+        }
+        document.getElementById("taskname").innerHTML = data.task;
+        document.getElementById("taskdesc").innerHTML = data.desc;
+        document.getElementById("tasktime").innerHTML =
+          `${data.time_start} to ${data.time_end}`;
+        document.getElementById("taskstatus").innerHTML = data.completed
+          ? "Completed"
+          : "Not Completed";
+        document.getElementById("deletetask").onclick = async () => {
+          const { error } = await supabaseclient
+            .from("tasks")
+            .delete()
+            .eq("id", taskId);
+          if (error) {
+            console.error(error);
+            return;
+          }
+          window.location.href = "./";
+        };
+        document.getElementById("gcal").onclick = async () => {
+          window.open(
+            `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(data.task)}&dates=${encodeURIComponent(data.time_start.replace(/-|:|\.\d\d\d/g, ""))}/${encodeURIComponent(data.time_end.replace(/-|:|\.\d\d\d/g, ""))}&details=${encodeURIComponent(data.desc)}`,
+          );
+        };
+        // Embed Calendar
+        // note: the events url param list is name|desc|start|end,name|desc|start|end,... and so on
+        const embedCalendar = document.createElement("iframe");
+        embedCalendar.src =
+          "./embed/calendar.html?hideheader=1&view=week&events=" +
+          encodeURIComponent(
+            "Task|" +
+              document.getElementById("taskdesc").innerHTML +
+              "|" +
+              document
+                .getElementById("tasktime")
+                .innerHTML.replace(" to ", "|"),
+          );
+        embedCalendar.style.width = "100%";
+        embedCalendar.style.height = "100%";
+        embedCalendar.style.border = "none";
+        embedCalendar.style.minHeight = "650px";
+        embedCalendar.style.display = "block";
+        embedCalendar.id="calendariframe"
+        document.getElementById("calendarembed").appendChild(embedCalendar);
+      }
+      loadTask();
+      let themes = ["", "dark", "alex"]
+      function loadTheme(t){
+        document.body.className = themes[t];
+        localStorage.setItem("theme", t);
+      }
+      function incrementTheme(){
+        let t = parseInt(localStorage.getItem("theme")) || 0;
+        t = (t + 1) % themes.length;
+        loadTheme(t);
+      }
+      document.getElementById("changestyle").addEventListener("click", () => {
+        incrementTheme();
+        let t = parseInt(localStorage.getItem("theme")) || 0;
+        iframe = document.getElementById("calendariframe")
+        // Talk to the iframe instead!
+        iframe.contentWindow.postMessage({ type: "changestyle", theme: t }, "*");
+      })
+      loadTheme(parseInt(localStorage.getItem("theme")) || 0);
+    </script>
+  </body>
+</html>

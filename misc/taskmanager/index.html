@@ -34,6 +34,7 @@
         --accent:#37ff8b;
         --secondary:#778472;
         --danger:#ff0022;
+        --btn-text:#333232;
       }
       body {
         background-color: var(--bg);
@@ -84,7 +85,7 @@
     <script src="/global.js"></script>
     <script src="/misc/supabase.js?v=2"></script>
     <!-- navigation bar here -->
-    <nav id="navbar"><button onclick="window.location.href='./page2.html'" ">Page 2</button><button onclick="incrementtheme()">Toggle Style</button></nav>
+    <nav id="navbar"><button onclick="window.location.href='./page2.html'">Page 2</button><button id="themebtn">Toggle Style</button></nav>
 
     
     <!-- actual task manager code here -->
@@ -127,6 +128,8 @@
           <p>${task.desc}</p>
           <p>${task.time_start} to ${task.time_end} (${timetaken} minutes)</p>
           <p>${task.name}'s task (${task.private?"private":"public"})</p>
+
+          <p><a href="./details.html?id=${task.id}" style="text-decoration: underline">View Details</a></p>
           <button onclick="(async (btn) => { await removeTask('${task.id}'); btn.parentElement.remove(); })(this);">Delete</button>
         `;
 
@@ -163,6 +166,20 @@
       }
 
       async function removeTask(id) {
+        const { data } = await supabaseclient.auth.getUser();
+        const email = data?.user?.email || 'anonymous';
+
+        const { data: task } = await supabaseclient
+          .from('tasks')
+          .select('name')
+          .eq('id', id)
+          .single();
+
+        if (task.name !== email && task.name !== 'anonymous') {
+          alert("You can't delete this task!");
+          return;
+        }
+
         await deleteTask(id);
       }
 
@@ -170,13 +187,24 @@
 
 
       async function checkLogin() {
-        const {data,error} = await supabaseclient.auth.getUser()
-        console.log(data)
+        const {data, error} = await supabaseclient.auth.getUser()
+        const navbar = document.getElementById("navbar");
+
         if (data.user) {
-          document.getElementById("navbar").innerHTML += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--text)">Logged in as ${data.user.email}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="window.location.href='./profile.html'">Profile</button><button onclick="logout();">Logout</button>`
-        }
-        else {
-          document.getElementById("navbar").innerHTML += `<button onclick="window.location.href='./login.html'">Login</button>`
+          const span = document.createElement("span");
+          span.innerHTML = `<span style="color:var(--text)">Logged in as ${data.user.email}</span>`;
+          const profileBtn = document.createElement("button");
+          profileBtn.textContent = "Profile";
+          profileBtn.onclick = () => window.location.href = './profile.html';
+          const logoutBtn = document.createElement("button");
+          logoutBtn.textContent = "Logout";
+          logoutBtn.onclick = logout;
+          navbar.append(span, profileBtn, logoutBtn);
+        } else {
+          const loginBtn = document.createElement("button");
+          loginBtn.textContent = "Login";
+          loginBtn.onclick = () => window.location.href = './login.html';
+          navbar.appendChild(loginBtn);
         }
       }
       checkLogin()
@@ -214,20 +242,26 @@
     </script>
     
     <script>
-      themes = ["light","dark","alex"]
+      const themes = ["","dark","alex"]
       function loadTheme(){
-        let t = localStorage.getItem("theme") || "0";
+        let t = parseInt(localStorage.getItem("theme")) || 0;
+        if (isNaN(t)) t = 0;
         document.body.className = themes[t];
       }
       function setTheme(t){
         localStorage.setItem("theme", t);
         loadTheme();
       }
-      function incrementtheme(){
-        let t = localStorage.getItem("theme") || "0";
+      function incrementTheme(){
+        let t = parseInt(localStorage.getItem("theme")) || 0;
+        console.log("before:", t, "body class:", document.body.className);
+        if (isNaN(t)) t = 0;
         t = (parseInt(t) + 1) % themes.length;
-        localStorage.setItem("theme", t);
+        console.log("after:", t, "setting to:", themes[t]);
+        setTheme(t);
+        console.log("body class after set:", document.body.className);
       }
+      document.getElementById("themebtn").addEventListener("click",incrementTheme)
       loadTheme();
     </script>
   </body>
