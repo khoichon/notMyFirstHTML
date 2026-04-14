@@ -5,15 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
     <style>
+      :root{
+        --bg: #9EB7E5;
+        --text: #0C120C;
+        --primary: #648DE5;
+        --accent: #00FF6C;
+        --secondary: #320e3b;
+        --btn-text: #0C120C;
+        --danger: #ff0000;
+      }
+      .dark{
+        --bg:#0d1117;
+        --text:#00ff9c;
+        --primary:#262b32;
+        --secondary:#010409;
+        --accent:#00ff9c;
+        --btn-text:#0d1117;
+        --danger:#ff0000;
+      }
+      .alex{
+        --bg:#333232;
+        --text:#eeeeee;
+        --primary:#a06cd5;
+        --accent:#37ff8b;
+        --secondary:#778472;
+        --danger:#ff0022;
+        --btn-text:#333232;
+      }
       body {
-        background-color: #000000;
-        color: #ffffff;
+        background-color: var(--bg);
+        color: var(--text);
         font-family: monospace;
+      }
+      button {
+        background-color: var(--accent);
+        color: var(--btn-text);
+        border: 1px solid var(--text);
+        padding: 5px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      nav {
+        background-color: var(--primary);
+        padding: 10px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      body.dark nav {
+        color: #320e3b;
+      }
+      input {
+        background-color: var(--primary);
+        color: var(--text);
+        border: 1px solid var(--text);
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px
+      }
+      textarea {
+        background-color: var(--primary);
+        color: var(--text);
+        border: 1px solid var(--text);
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px;
+      }
+      input[type="checkbox"] {
+        accent-color: var(--accent);
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
+    <nav>
+      <button onclick="window.location.href='./'">Back to home</button>
+      <button onclick="incrementTheme()">Change theme</button>
+    </nav>
     <h1>Task Manager</h1>
     <p>Please login to continue.</p>
     <form id="login">
@@ -21,6 +89,10 @@
       <input type="password" name="password" placeholder="Password" required><br>
       <input type="submit" value="Login">
     </form><p>To login, go to <a href="https://hashchat-server.onrender.com/">this site</a> to sign up.</p>
+    <p>Can't sign up? If so, please contact <a href="mailto:nguyen_dac_khoi_nguyen@students.edu.sg?subject=Task%20Manager%20Sign%20Up&body=I%20can't%20sign%20up%20for%20the%20task%20manager.%20Please%20help%20me.">me</a> and I will respond as soon as possible.</p>
+    <p>Can't log in for the first time? Check your password and email.</p>
+    <p>Forgot your password? contact <a href="mailto:nguyen_dac_khoi_nguyen@students.edu.sg?subject=Task%20Manager%20Password%20Reset&body=Please%20reset%20my%20password%20for%20the%20task%20manager%2C%20my%20username%20is%20%3Cusername%3E">me</a> to reset your password </p>
+    <p>For any issues, please contact me using the same email used to log in.</p>
     <script>
       const supabaseUrl = 'https://digtgktzyxonguxhhdri.supabase.co'
       const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpZ3Rna3R6eXhvbmd1eGhoZHJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NDkzNzksImV4cCI6MjA4ODAyNTM3OX0.YYSwTR1Ns_zs7n5Brp6qTGZ1MYD_avfseMi1aGRcHGc'
@@ -41,6 +113,28 @@
         }
         window.location.href = "./index.html";
       })
+    </script>
+    <script>
+      const themes = ["","dark","alex"];
+      function loadTheme(){
+        let t = parseInt(localStorage.getItem("theme")) || 0;
+        if (isNaN(t)) t = 0;
+        document.body.className = themes[t];
+      }
+      function setTheme(t){
+        localStorage.setItem("theme", t);
+        loadTheme();
+      }
+      function incrementTheme(){
+        let t = parseInt(localStorage.getItem("theme")) || 0;
+        console.log("before:", t, "body class:", document.body.className);
+        if (isNaN(t)) t = 0;
+        t = (parseInt(t) + 1) % themes.length;
+        console.log("after:", t, "setting to:", themes[t]);
+        setTheme(t);
+        console.log("body class after set:", document.body.className);
+      }
+      loadTheme();
     </script>
   </body>  
 </html>

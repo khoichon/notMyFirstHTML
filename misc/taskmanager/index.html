@@ -113,10 +113,29 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+      
+
+      
       const supabaseUrl = 'https://digtgktzyxonguxhhdri.supabase.co'
       const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpZ3Rna3R6eXhvbmd1eGhoZHJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NDkzNzksImV4cCI6MjA4ODAyNTM3OX0.YYSwTR1Ns_zs7n5Brp6qTGZ1MYD_avfseMi1aGRcHGc'
       const supabaseclient = supabase.createClient(supabaseUrl, supabaseKey)
 
+
+      async function getUsername(id){
+        // reference the "users" table in supabase and match the "id" column and use the "name" parameter
+        const { data, error } = await supabaseclient
+          .from('users')
+          .select('name')
+          .eq('id', id)
+          .single();
+        if (error) {
+          console.error(error);
+          return null;
+        }
+        return data.name;
+      }
+
+      
       function renderTask(task) {
 
         let tasklist = document.getElementById("tasklist");
@@ -191,10 +210,12 @@
       async function checkLogin() {
         const {data, error} = await supabaseclient.auth.getUser()
         const navbar = document.getElementById("navbar");
-
+        
         if (data.user) {
+          console.log("Logged in as", data.user.email)
+          
           const span = document.createElement("span");
-          span.innerHTML = `<span style="color:var(--text)">Logged in as ${data.user.email}</span>`;
+          span.innerHTML = `<span style="color:var(--text)">Logged in as ${await getUsername(data.user.id)}</span>`;
           const profileBtn = document.createElement("button");
           profileBtn.textContent = "Profile";
           profileBtn.onclick = () => window.location.href = './profile.html';
