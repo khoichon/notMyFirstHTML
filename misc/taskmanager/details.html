@@ -145,8 +145,8 @@
         const embedCalendar = document.createElement("iframe");
         embedCalendar.src =
           "./embed/calendar.html?hideheader=1&view=week&events=" +
-          encodeURIComponent(
-            "Task|" +
+          encodeURIComponent(document.getElementById("taskname").innerHTML + 
+            "|" +
               document.getElementById("taskdesc").innerHTML +
               "|" +
               document
