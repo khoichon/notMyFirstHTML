@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Image</title>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        font-family: monospace;
+      }
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh
+      }
+    </style>
+  </head>
+  <body>
+      <img id=picture src="https://picsum.photos/200/300" alt="Random Image"><br>
+      <button onclick="document.getElementById('picture').src='https://picsum.photos/200/300?random='+Math.random()">New Image</button>
+  </body>
+</html>

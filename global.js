@@ -191,11 +191,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!element) return;
 
   element.addEventListener('mouseenter', () => {
-    element.style.backgroundColor = 'blue'; // Style to apply on hover
+    element.style.display = 'none'; // Style to apply on hover
   });
 
   element.addEventListener('mouseleave', () => {
-    element.style.backgroundColor = ''; // Revert style when leaving
+    element.style.display = 'inline-block'; // Revert style when leaving
   });
 
 });

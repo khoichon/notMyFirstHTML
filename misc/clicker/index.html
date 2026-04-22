@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Clicker Game</title>
+      <style>
+         body{
+            background-color: #000000;
+            color: #ffffff;
+            font-family: monospace;
+         }
+         .centered{
+            text-align: center;
+         }
+        </style>
+   </head>
+   <body>
+<button id="clicker" onclick="click()">Click me!</button>
+     <p>Clicks: <strong id=clickcnt>0</strong></p>
+
+     <script src=../../effects.mjs type=module></script>
+     <script src=../../global.js></script>
+      <script>
+         let clicks = 0;
+         function click() {
+            clicks++;
+            document.getElementById("clickcnt").innerHTML = clicks;
+            bounce(document.getElementById("clicker"));
+         }
+      </script>
+   </body>

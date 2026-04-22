@@ -112,6 +112,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    
     <script>
       
 
@@ -121,6 +123,10 @@
       const supabaseclient = supabase.createClient(supabaseUrl, supabaseKey)
 
 
+  
+
+
+      
       async function getUsername(id){
         // reference the "users" table in supabase and match the "id" column and use the "name" parameter
         const { data, error } = await supabaseclient
@@ -264,7 +270,7 @@
       document.getElementById("addtask").addEventListener("click", addtask)
 
       // load service worker
-      navigator.serviceWorker.register('./sw.js')
+      navigator.serviceWorker.register('../../sw.js')
     </script>
     
     <script>
@@ -289,6 +295,44 @@
       }
       document.getElementById("themebtn").addEventListener("click",incrementTheme)
       loadTheme();
+    </script>
+    <script>
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission()
+      }
+      function notify(title, body) {
+        if (Notification.permission !== "granted") return;
+        new Notification(title, { body })
+      }
+
+      const notifiedStart = new Set();
+      const notifiedEnd = new Set();
+
+      setInterval(async () => {
+        const { data } = await supabaseclient.auth.getUser();
+        const email = data?.user?.email || null;
+
+        let query = supabaseclient.from("tasks").select("*");
+        if (email) {
+          query = query.or(`private.eq.false,name.eq.${email}`);
+        } else {
+          query = query.eq('private', false);
+        }
+
+        const { data: tasks } = await query;
+
+        tasks.forEach(task => {
+          const now = new Date();
+          if (new Date(task.time_start) <= now && new Date(task.time_end) >= now && !notifiedStart.has(task.id)) {
+            notify("Task Started", `${task.task} has started!`);
+            notifiedStart.add(task.id);
+          }
+          if (new Date(task.time_end) <= now && !notifiedEnd.has(task.id)) {
+            notify("Task Due", `${task.task} is due!`);
+            notifiedEnd.add(task.id);
+          }
+        });
+      }, 30000);
     </script>
   </body>
 </html>

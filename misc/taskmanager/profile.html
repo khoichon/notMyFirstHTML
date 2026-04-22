@@ -115,30 +115,40 @@
         document.getElementById("incomplete").showModal();
       }
       incompleteIntro();
+      let supabaseurl = "https://digtgktzyxonguxhhdri.supabase.co"
+      let supabasepwd = "sb_publishable_tx_LAFDbNFWqdZuiaD4ReQ_9WIQ41dC"
+      const supabaseclient = supabase.createClient(supabaseurl, supabasepwd);
     </script>
     <script>
-      const defaultData = {
-        xp: 0,
-        streak: 0
-      }
-      function loadSaveData(){
-        
-        let data = localStorage.getItem("taskmgr-savedata");
-        // check every field to check if it exists, if it does not, use default value
-        if (!data) data = defaultData;
-        else {
-          try{data = JSON.parse(data);}
-          catch{
-            data = defaultData;
-          }
+      async function loadSaveData() {
+        const { data: authData } = await supabaseclient.auth.getUser();
+
+        if (!authData?.user) {
+          alert("You must be logged in to use this feature.");
+          return;
         }
-        for (let key in defaultData){
-          if (!data[key]) data[key] = defaultData[key];
+
+        const userId = authData.user.id;
+
+        const { data: userdata, error } = await supabaseclient
+          .from("tasks_users")
+          .select("*")
+          .eq("id", userId)
+          .maybeSingle();
+
+        if (error && error.code !== "PGRST116") {
+          // PGRST116 = "no rows found", anything else is a real error
+          console.log("Error fetching data:", error);
+          return;
         }
-        return data
-      }
-      function saveSaveData(data){
-        localStorage.setItem("taskmgr-savedata", JSON.stringify(data));
+
+        if (!userdata) {
+          // Row doesn't exist yet, create it with defaults
+          await supabaseclient.from("tasks_users").insert({ id: userId });
+          return { xp: 0, streak: 0, ballpit: 0 };
+        }
+
+        return userdata;
       }
       function getLevelData(xp){
         let level = 1;
